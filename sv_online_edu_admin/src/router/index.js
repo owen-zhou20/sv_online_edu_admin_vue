@@ -89,6 +89,49 @@ export const constantRouterMap = [
   },
 
   {
+    path: '/course',
+    component: Layout,
+    redirect: '/course/list',
+    name: 'Course Management',
+    meta: { title: 'Course Management', icon: 'example' },
+    children: [
+      {
+        path: 'list',
+        name: 'Course List',
+        component: () => import('@/views/edu/course/list'),
+        meta: { title: 'Course List', icon: 'table' }
+      },
+      {
+        path: 'courseinfo',
+        name: 'Add Course',
+        component: () => import('@/views/edu/course/courseinfo'),
+        meta: { title: 'Add Course', icon: 'tree' }
+      },
+      {
+        path: 'courseinfo/:id',
+        name: 'EduCourseInfoEdit',
+        component: () => import('@/views/edu/course/courseinfo'),
+        meta: { title: 'Fill in this course infomation', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'chapter/:id',
+        name: 'EduCourseChapterEdit',
+        component: () => import('@/views/edu/course/chapter'),
+        meta: { title: 'Create course outline', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'publish/:id',
+        name: 'EduCoursePublishEdit',
+        component: () => import('@/views/edu/course/publish'),
+        meta: { title: 'Release new course', noCache: true },
+        hidden: true
+      }
+    ]
+  },
+
+  {
     path: '/example',
     component: Layout,
     redirect: '/example/table',
