@@ -11,17 +11,39 @@
     </el-steps>
 
     <el-form label-width="120px">
-      <el-form-item label="课程标题">
+      <el-form-item label=" 课程标题">
         <el-input v-model="courseInfo.title"
                   placeholder=" 示例：机器学习项目课：从基础到搭建项目视频课程。专业名称注意大小写" />
       </el-form-item>
-      <!-- 所属分类 TODO -->
-      <!-- 课程讲师 TODO -->
+
+      <!-- Course subject-->
+      <el-form-item label="Course subject">
+        <!-- one subject-->
+        <el-select v-model="courseInfo.subjectParentId"
+                   placeholder="Level one subject"
+                   style="width:260px"
+                   @change="subjectLevelOneChanged">
+          <el-option v-for="subject in subjectOneList"
+                     :key="subject.id"
+                     :label="subject.title"
+                     :value="subject.id" />
+        </el-select>
+        <!-- two subject-->
+        <el-select v-model="courseInfo.subjectId"
+                   placeholder="Level two subject"
+                   style="width:260px">
+          <el-option v-for="subject in subjectTwoList"
+                     :key="subject.id"
+                     :label="subject.title"
+                     :value="subject.id" />
+        </el-select>
+      </el-form-item>
 
       <!-- 课程讲师 -->
       <el-form-item label="课程讲师">
         <el-select v-model="courseInfo.teacherId"
-                   placeholder="Please select a teacher">
+                   placeholder="Please select a teacher"
+                   style="width:260px">
           <el-option v-for="teacher in teacherList"
                      :key="teacher.id"
                      :label="teacher.name"
@@ -41,6 +63,16 @@
                   placeholder=" " />
       </el-form-item>
       <!-- 课程封面 TODO -->
+      <el-form-item label="课程封面">
+        <el-upload :show-file-list="false"
+                   :on-success="handleAvatarSuccess"
+                   :before-upload="beforeAvatarUpload"
+                   :action="BASE_API+'/eduoss/fileoss'"
+                   class="avatar-uploader">
+          <img :src="courseInfo.cover">
+        </el-upload>
+      </el-form-item>
+
       <el-form-item label="课程价格">
         <el-input-number :min="0"
                          v-model="courseInfo.price"
@@ -59,6 +91,8 @@
 
 <script>
 import course from '@/api/edu/course'
+import subject from '@/api/edu/subject'
+
 export default {
   data() {
     return {
@@ -66,21 +100,59 @@ export default {
       courseInfo: { // course entity
         title: '',
         subjectId: '',
-        subjectParentId: '1557256647536111617',
+        subjectParentId: '',
         teacherId: '',
         lessonNum: 0,
         description: '',
-        cover: '',
+        cover: '/static/01.jpg',
         price: 0
       },
-      teacherList: [] // teacher list
+      teacherList: [], // teacher list
+      subjectOneList: [], // one subject list
+      subjectTwoList: [], // two subject list
+      BASE_API: process.env.BASE_API
     }
   },
   created() {
     // Get teacher list when this page is created
     this.getListTeacher()
+    // Get one subject list when this page is created
+    this.getOneSubject()
   },
   methods: {
+    // After success to upload avatar
+    handleAvatarSuccess(res, file) {
+      this.courseInfo.cover = res.data.url
+    },
+    // before upload avatar
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg'
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+      }
+      return isJPG && isLt2M
+    },
+    // Get two subject and show when one subject is changed
+    subjectLevelOneChanged(value) { // value is the Id for this one subject
+      for (var i = 0; i < this.subjectOneList.length; i++) {
+        var oneSubject = this.subjectOneList[i]
+        if (oneSubject.id == value) {
+          this.subjectTwoList = oneSubject.children
+          this.courseInfo.subjectId = ''
+        }
+      }
+    },
+    // Get all one subject
+    getOneSubject() {
+      subject.getSubjectList()
+        .then(response => {
+          this.subjectOneList = response.data.list
+        })
+    },
     // Get all teacher list
     getListTeacher() {
       course.getListTeacher()

@@ -1,4 +1,4 @@
-<template>
+<template >
   <div class="app-container">
     <el-input v-model="filterText"
               placeholder="Filter keyword"
