@@ -111,6 +111,7 @@ export default {
         cover: '/static/01.jpg',
         price: 0
       },
+      courseId: '',
       teacherList: [], // teacher list
       subjectOneList: [], // one subject list
       subjectTwoList: [], // two subject list
@@ -118,12 +119,55 @@ export default {
     }
   },
   created() {
-    // Get teacher list when this page is created
-    this.getListTeacher()
-    // Get one subject list when this page is created
-    this.getOneSubject()
+    // Get course id from route address
+    if (this.$route.params && this.$route.params.id) { // Modify coirse info by course id
+      this.courseId = this.$route.params.id
+      // Show course info if get course id form route address
+      this.getInfo()
+    } else { // Add new course
+      this.courseInfo = { // course entity
+        title: '',
+        subjectId: '',
+        subjectParentId: '',
+        teacherId: '',
+        lessonNum: 0,
+        description: '',
+        cover: '/static/01.jpg',
+        price: 0
+      }
+      // Get teacher list when this page is created
+      this.getListTeacher()
+      // Get one subject list when this page is created
+      this.getOneSubject()
+    }
   },
   methods: {
+    // find course info by course id
+    getInfo() {
+      course.getCourseInfoById(this.courseId)
+        .then(response => {
+          this.courseInfo = response.data.courseInfoVo
+          // 1. Get all onesubject list and twosubject list
+          subject.getSubjectList()
+            .then(response => {
+              // Get all onesubject list
+              this.subjectOneList = response.data.list
+              //
+              for (var i = 0; i < this.subjectOneList.length; i++) {
+                // Get all onesubject list
+                var oneSubject = this.subjectOneList[i]
+                // Get all twosubjects base onesubject id from courseinfo
+                if (this.courseInfo.subjectParentId == oneSubject.id) {
+                  this.subjectTwoList = oneSubject.children
+                }
+              }
+              // Get teacher list when this page is created
+              this.getListTeacher()
+            })
+        })
+    },
+    //
+
     // After success to upload avatar
     handleAvatarSuccess(res, file) {
       this.courseInfo.cover = res.data.url
@@ -164,7 +208,8 @@ export default {
           this.teacherList = response.data.teacherList
         })
     },
-    saveOrUpdate() {
+    // Add course
+    addCourse() {
       course.addCourseInfo(this.courseInfo)
         .then(response => {
           // Notice info
@@ -175,6 +220,29 @@ export default {
           // Go to next step
           this.$router.push({ path: '/course/chapter/' + response.data.courseId })
         })
+    },
+    // Modify course
+    updateCourse() {
+      course.updateCourseInfo(this.courseInfo)
+        .then(response => {
+          // Notice info
+          this.$message({
+            type: 'success',
+            message: 'Success to modify course infomation !'
+          })
+          // Go to next step
+          this.$router.push({ path: '/course/chapter/' + this.courseId })
+        })
+    },
+    saveOrUpdate() {
+      // if (!this.courseId) {
+      if (!this.courseInfo.id) {
+        // Add course info
+        this.addCourse()
+      } else {
+        // Modify course info
+        this.updateCourse()
+      }
     }
   }
 }
