@@ -6,7 +6,7 @@
               align-center
               style="margin-bottom: 40px;">
       <el-step title="Fill in this course infomation" />
-      <el-step title="Create course outline" />
+      <el-step title="Create course outline (chapters and videos)" />
       <el-step title="Release new course" />
     </el-steps>
 

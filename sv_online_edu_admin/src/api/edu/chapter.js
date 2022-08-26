@@ -8,7 +8,7 @@ export default {
       method: 'get'
     })
   },
-  // Get all course chapters list include all videos list by course id
+  // Add chapter by course id
   addChapter(chapter) {
     return request({
       url: `/eduservice/chapter/addChapter`,

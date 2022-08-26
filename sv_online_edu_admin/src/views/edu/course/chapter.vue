@@ -6,7 +6,7 @@
               align-center
               style="margin-bottom: 40px;">
       <el-step title="Fill in this course infomation" />
-      <el-step title="Create course outline (chapters and sections)" />
+      <el-step title="Create course outline (chapters and videos)" />
       <el-step title="Release new course" />
     </el-steps>
 
@@ -20,22 +20,24 @@
         <p>
           {{ chapter.title }}
           <span class="acts">
-            <el-button type="text">Add section</el-button>
-            <el-button style=""
-                       type="text"
+            <el-button type="text"
+                       @click="openVideo(chapter.id)">Add video</el-button>
+            <el-button type="text"
                        @click="openEditChapter(chapter.id)">Modify</el-button>
             <el-button type="text"
                        @click="removeChapter(chapter.id)">Delete</el-button>
           </span>
         </p>
-        <!-- Section (Video) -->
+        <!-- Video -->
         <ul class="chanpterList videoList">
           <li v-for="video in chapter.children"
               :key="video.id">
             <p>{{ video.title }}
               <span class="acts">
-                <el-button type="text">Modify</el-button>
-                <el-button type="text">Delete</el-button>
+                <el-button type="text"
+                           @click="openEditVideo(video.id)">Modify</el-button>
+                <el-button type="text"
+                           @click="removeVideo(video.id)">Delete</el-button>
               </span>
             </p>
           </li>
@@ -108,11 +110,46 @@
                    @click="saveOrUpdate">Save</el-button>
       </div>
     </el-dialog>
+
+    <!-- Add and modify video dialog -->
+    <el-dialog :visible.sync="dialogVideoFormVisible"
+               title="Add or modify video">
+      <el-form :model="video"
+               label-width="120px">
+        <el-form-item label="Video title">
+          <el-input v-model="video.title" />
+        </el-form-item>
+        <el-form-item label="Video sort">
+          <el-input-number v-model="video.sort"
+                           :min="0"
+                           controls-position="right" />
+        </el-form-item>
+        <el-form-item label="It is free?">
+          <el-radio-group v-model="video.isFree">
+            <el-radio :label="1">Free</el-radio>
+            <el-radio :label="0">Not free</el-radio>
+            </el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="Upload video">
+          <!-- TODO -->
+        </el-form-item>
+      </el-form>
+      <div slot="footer"
+           class="dialog-footer">
+        <el-button @click="dialogVideoFormVisible = false">Cancel</el-button>
+        <el-button :disabled="saveVideoBtnDisabled"
+                   type="primary"
+                   @click="saveOrUpdateVideo">Save</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import chapter from '@/api/edu/chapter'
+import video from '@/api/edu/video'
 
 export default {
   data() {
@@ -124,7 +161,15 @@ export default {
         title: '',
         sort: 0
       },
-      dialogChapterFormVisible: false // Show dialog chapter
+      video: {// Video
+        id: '',
+        title: '',
+        sort: 0,
+        isFree: 0,
+        videoSourceId: ''
+      },
+      dialogChapterFormVisible: false, // Show dialog chapter
+      dialogVideoFormVisible: false // Show dialog video
     }
   },
   created() {
@@ -135,6 +180,93 @@ export default {
     }
   },
   methods: {
+    // =================== Video ======================
+    // Update video
+    updateVideo() {
+      video.updateVideo(this.video)
+        .then(response => {
+          // Close dialog
+          this.video.id = ''
+          this.dialogVideoFormVisible = false
+          // Notice
+          this.$message({
+            type: 'success',
+            message: 'Success to modify this video!'
+          })
+          // Refresh
+          this.getChapterVideo()
+        })
+    },
+    // Modify video
+    openEditVideo(videoId) {
+      video.getVideo(videoId)
+        .then(response => {
+          this.video = response.data.video
+          this.dialogVideoFormVisible = true
+          console.log('video.isFree ===>' + this.video.isFree)
+          console.log('video.chapterId ===>' + this.video.chapterId)
+          console.log('video.courseId ===>' + this.video.courseId)
+        })
+    },
+    // Delete video
+    removeVideo(videoId) {
+      this.$confirm('This will permanently delete this video record. Continue?', 'Warning', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      }).then(() => {
+        // call delete video method
+        video.deleteVideo(videoId)
+          .then(response => { // success to delete video by id
+            this.$message({
+              type: 'success',
+              message: 'Delete completed'
+            })
+            // Refresh
+            this.getChapterVideo()
+          })
+        // notice message
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: 'Delete canceled'
+        })
+      })
+    },
+    // Add video dialog
+    openVideo(chapterId) {
+      this.video.title = ''
+      this.video.sort = 0
+      this.video.isFree = 0
+      this.video.videoSourceId = ''
+      this.dialogVideoFormVisible = true
+      // Get chapterId
+      this.video.chapterId = chapterId
+      this.video.courseId = this.courseId
+    },
+    // Add video
+    addVideo() {
+      video.addVideo(this.video)
+        .then(response => {
+          // Close dialog
+          this.dialogVideoFormVisible = false
+          // Notice
+          this.$message({
+            type: 'success',
+            message: 'Success to add this video!'
+          })
+          // Refresh
+          this.getChapterVideo()
+        })
+    },
+    saveOrUpdateVideo() {
+      if (!this.video.id) {
+        this.addVideo()
+      } else {
+        this.updateVideo()
+      }
+    },
+    // =================== Chapter ======================
     // Delete chapter
     removeChapter(chapterId) {
       this.$confirm('This will permanently delete this chapter record. Continue?', 'Warning', {
@@ -168,7 +300,7 @@ export default {
           this.chapter = response.data.chapter
         })
     },
-    // Add chapter dialog
+    // Open chapter dialog
     openChapterDialog() {
       this.dialogChapterFormVisible = true
       this.chapter.title = ''
