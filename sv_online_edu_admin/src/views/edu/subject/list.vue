@@ -1,5 +1,6 @@
 <template >
   <div class="app-container">
+    <h1 style="text-align: center;">Subject list</h1>
     <el-input v-model="filterText"
               placeholder="Filter keyword"
               style="margin-bottom:30px;" />

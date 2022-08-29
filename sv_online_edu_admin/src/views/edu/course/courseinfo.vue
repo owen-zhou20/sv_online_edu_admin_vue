@@ -84,10 +84,9 @@
       <el-form-item>
         <el-button :disabled="saveBtnDisabled"
                    type="primary"
-                   @click="saveOrUpdate">Save and next</el-button>
+                   @click="saveOrUpdate">Save and next <i class="el-icon-d-arrow-right el-icon-right" /></el-button>
       </el-form-item>
     </el-form>
-
   </div>
 </template>
 

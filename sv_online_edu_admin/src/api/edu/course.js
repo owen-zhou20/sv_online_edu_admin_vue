@@ -30,5 +30,33 @@ export default {
       method: 'post',
       data: courseInfo
     })
+  },
+  // 5. Get publish course info by course id
+  getPublishCourseInfo(id) {
+    return request({
+      url: `/eduservice/course/getPublishCourseInfo/` + id,
+      method: 'get'
+    })
+  },
+  // 6. Publish course
+  publishCourse(id) {
+    return request({
+      url: `/eduservice/course/publishCourse/` + id,
+      method: 'post'
+    })
+  },
+  // 7. Modify course status as draft
+  draftCourse(id) {
+    return request({
+      url: `/eduservice/course/draftCourse/` + id,
+      method: 'post'
+    })
+  },
+  // TODO 8. Course list
+  getCourseList() {
+    return request({
+      url: `/eduservice/course/courseList`,
+      method: 'get'
+    })
   }
 }

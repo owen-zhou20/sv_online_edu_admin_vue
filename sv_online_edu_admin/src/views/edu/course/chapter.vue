@@ -45,10 +45,12 @@
       </li>
     </ul>
     <div>
-      <el-button @click="previous">Previous</el-button>
+      <el-button type="info"
+                 icon="el-icon-d-arrow-left"
+                 @click="previous">Previous</el-button>
       <el-button :disabled="saveBtnDisabled"
                  type="primary"
-                 @click="next">Save and next</el-button>
+                 @click="next">Save and next <i class="el-icon-d-arrow-right el-icon-right" /></el-button>
     </div>
 
     <!-- Chapter
@@ -91,6 +93,7 @@
 
     <!-- Add and modify chapter dialog -->
     <el-dialog :visible.sync="dialogChapterFormVisible"
+               :before-close="closeChapter"
                title="Add chapter">
       <el-form :model="chapter"
                label-width="120px">
@@ -105,7 +108,8 @@
       </el-form>
       <div slot="footer"
            class="dialog-footer">
-        <el-button @click="dialogChapterFormVisible = false">Cancel</el-button>
+        <el-button type="info"
+                   @click="cancelChapter">Cancel</el-button>
         <el-button type="primary"
                    @click="saveOrUpdate">Save</el-button>
       </div>
@@ -113,6 +117,7 @@
 
     <!-- Add and modify video dialog -->
     <el-dialog :visible.sync="dialogVideoFormVisible"
+               :before-close="closeVideo"
                title="Add or modify video">
       <el-form :model="video"
                label-width="120px">
@@ -137,7 +142,8 @@
       </el-form>
       <div slot="footer"
            class="dialog-footer">
-        <el-button @click="dialogVideoFormVisible = false">Cancel</el-button>
+        <el-button type="info"
+                   @click="cancelVideo">Cancel</el-button>
         <el-button :disabled="saveVideoBtnDisabled"
                    type="primary"
                    @click="saveOrUpdateVideo">Save</el-button>
@@ -259,12 +265,23 @@ export default {
           this.getChapterVideo()
         })
     },
+    // Save or update butten for video
     saveOrUpdateVideo() {
       if (!this.video.id) {
         this.addVideo()
       } else {
         this.updateVideo()
       }
+    },
+    // Cancel butten for video
+    cancelVideo() {
+      this.video.id = ''
+      this.dialogVideoFormVisible = false
+    },
+    // Before add or update dialog colse, set video id = ''
+    closeVideo() {
+      this.video.id = ''
+      this.dialogVideoFormVisible = false
     },
     // =================== Chapter ======================
     // Delete chapter
@@ -339,12 +356,23 @@ export default {
           this.getChapterVideo()
         })
     },
+    // Save or update butten for chapter
     saveOrUpdate() {
       if (!this.chapter.id) {
         this.addChapter()
       } else {
         this.updateChapter()
       }
+    },
+    // Cancel butten for add or modify chapter
+    cancelChapter() {
+      this.chapter.id = ''
+      this.dialogChapterFormVisible = false
+    },
+    // Before add or update dialog colse, set chapter id = ''
+    closeChapter() {
+      this.chapter.id = ''
+      this.dialogChapterFormVisible = false
     },
     // Get all course chapters list include all videos list by course id
     getChapterVideo() {

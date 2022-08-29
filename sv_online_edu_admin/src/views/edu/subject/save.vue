@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <h1 style="text-align: center;">Add subject</h1>
     <el-form label-width="120px">
       <el-form-item label="Information">
         <el-tag type="info">Excel model</el-tag>

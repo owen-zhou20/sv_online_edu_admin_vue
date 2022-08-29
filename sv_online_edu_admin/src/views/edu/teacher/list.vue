@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    teacher list
+    <h1 style="text-align: center;">Teacher list</h1>
     <!--select conditions for this table-->
     <el-form :inline="true"
              class="demo-form-inline">
