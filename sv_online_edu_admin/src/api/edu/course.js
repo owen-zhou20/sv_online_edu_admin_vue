@@ -52,11 +52,26 @@ export default {
       method: 'post'
     })
   },
-  // TODO 8. Course list
+  // 8. Course list
   getCourseList() {
     return request({
       url: `/eduservice/course/courseList`,
       method: 'get'
+    })
+  },
+  // 9. Delete course by course id
+  deleteCourseById(id) {
+    return request({
+      url: `/eduservice/course/` + id,
+      method: 'delete'
+    })
+  },
+  // 10. Conditions select course list with pagination
+  getCourseListPage(current, limit, courseQuery) {
+    return request({
+      url: `/eduservice/course/pageCourse/${current}/${limit}`,
+      method: 'post',
+      data: courseQuery
     })
   }
 }

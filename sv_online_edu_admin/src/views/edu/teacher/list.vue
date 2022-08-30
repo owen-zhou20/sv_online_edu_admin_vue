@@ -97,10 +97,12 @@
 
     <!-- Pagination -->
     <el-pagination :current-page="page"
+                   :page-sizes="[3, 5, 10, 50]"
                    :page-size="limit"
                    :total="total"
                    style="padding: 30px 0; text-align: center;"
-                   layout="total, prev, pager, next, jumper"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   @size-change="handleSizeChange"
                    @current-change="getList" />
 
   </div>
@@ -151,7 +153,7 @@ export default {
     },
     // delete teacher method
     removeDataById(id) {
-      this.$confirm('This will permanently delete this teacher record. Continue?', 'Warning', {
+      this.$confirm('This will permanently delete this teacher. Continue?', 'Warning', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
         type: 'warning'
@@ -172,6 +174,11 @@ export default {
           message: 'Delete canceled'
         })
       })
+    },
+    // Change size in pagination
+    handleSizeChange(limit) {
+      this.limit = limit
+      this.getList()
     }
   }
 }

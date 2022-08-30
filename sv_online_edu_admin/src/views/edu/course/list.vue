@@ -19,21 +19,14 @@
         </el-select>
       </el-form-item>
       <el-form-item label="添加时间">
-        <el-date-picker v-model="courseQuery.begin"
+        <el-date-picker v-model="courseQuery.gmt_create"
                         type="datetime"
                         placeholder="选择开始时间"
                         format="dd-MM-yyyy HH:mm:ss"
                         value-format="yyyy-MM-dd HH:mm:ss"
                         default-time="00:00:00" />
       </el-form-item>
-      <el-form-item>
-        <el-date-picker v-model="courseQuery.end"
-                        type="datetime"
-                        placeholder="选择截止时间"
-                        format="dd-MM-yyyy HH:mm:ss"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        default-time="00:00:00" />
-      </el-form-item>
+
       <el-button type="primary"
                  icon="el-icon-search"
                  @click="getList()">Search</el-button>
@@ -112,10 +105,12 @@
 
     <!-- Pagination -->
     <el-pagination :current-page="page"
+                   :page-sizes="[3, 5, 10, 50]"
                    :page-size="limit"
                    :total="total"
                    style="padding: 30px 0; text-align: center;"
-                   layout="total, prev, pager, next, jumper"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   @size-change="handleSizeChange"
                    @current-change="getList" />
 
   </div>
@@ -132,6 +127,9 @@ export default {
       limit: 3,
       total: 0,
       courseQuery: {
+        title: '',
+        status: '',
+        gmt_create: null
       }
     }
   },
@@ -139,13 +137,18 @@ export default {
     this.getList()
   },
   methods: {
-    // get teaccher list with pagination
-    getList() {
-      course.getCourseList()
+    // get course list with pagination
+    getList(page = 1) {
+      this.page = page
+      course
+        .getCourseListPage(this.page, this.limit, this.courseQuery)
         .then((response) => {
           // response from back-end api
           // console.log(response)
-          this.list = response.data.courseList
+          this.list = response.data.rows
+          this.total = response.data.total
+          console.log(this.list)
+          console.log(this.total)
         })
         .catch((error) => {
           console.log(error)
@@ -153,6 +156,35 @@ export default {
     },
     resetData() { // reset all conditions for this table
       this.courseQuery = {}
+      this.getList()
+    },
+    // Delete course by course id
+    removeDataById(id) {
+      this.$confirm('This will permanently delete this course. Continue?', 'Warning', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      }).then(() => {
+        // call delete course method
+        course.deleteCourseById(id)
+          .then(response => { // success to delete course by id
+            this.$message({
+              type: 'success',
+              message: 'Delete completed'
+            })
+            this.getList()
+          })
+        // notice message
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: 'Delete canceled'
+        })
+      })
+    },
+    // Change size in pagination
+    handleSizeChange(limit) {
+      this.limit = limit
       this.getList()
     }
   }
