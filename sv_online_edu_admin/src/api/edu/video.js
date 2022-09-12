@@ -30,5 +30,12 @@ export default {
       url: `/eduservice/video/getVideoInfo/` + videoId,
       method: 'get'
     })
+  },
+  // Delete upload video form Ali VOD
+  deleteAliVodVideo(videoId) {
+    return request({
+      url: `/eduvod/video/removeAliVodVideo/` + videoId,
+      method: 'delete'
+    })
   }
 }
