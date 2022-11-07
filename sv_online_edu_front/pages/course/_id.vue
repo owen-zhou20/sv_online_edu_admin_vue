@@ -6,51 +6,60 @@
       <section class="path-wrap txtOf hLh30">
         <a href="#"
            title
-           class="c-999 fsize14">首页</a>
+           class="c-999 fsize14">Home</a>
         \
         <a href="#"
            title
-           class="c-999 fsize14">课程列表</a>
+           class="c-999 fsize14">{{courseWebVo.subjectLevelOne}}</a>
         \
-        <span class="c-333 fsize14">Java精品课程</span>
+        <span class="c-333 fsize14">{{courseWebVo.subjectLevelTwo}}</span>
       </section>
       <div>
         <article class="c-v-pic-wrap"
                  style="height: 357px;">
           <section class="p-h-video-box"
                    id="videoPlay">
-            <img src="~/assets/photo/course/1442295581911.jpg"
-                 alt="Java精品课程"
+            <img height="357px"
+                 width="100%"
+                 :src="courseWebVo.cover"
+                 alt="courseWebVo.title"
                  class="dis c-v-pic">
           </section>
         </article>
         <aside class="c-attr-wrap">
           <section class="ml20 mr15">
             <h2 class="hLh30 txtOf mt15">
-              <span class="c-fff fsize24">Java精品课程</span>
+              <span class="c-fff fsize24">{{courseWebVo.title}}</span>
             </h2>
             <section class="c-attr-jg">
-              <span class="c-fff">价格：</span>
+              <span class="c-fff">Price: </span>
               <b class="c-yellow"
-                 style="font-size:24px;">￥0.00</b>
+                 style="font-size:24px;">${{courseWebVo.price}}</b>
             </section>
             <section class="c-attr-mt c-attr-undis">
-              <span class="c-fff fsize14">主讲： 唐嫣&nbsp;&nbsp;&nbsp;
+              <span class="c-fff fsize14">Teacher: {{courseWebVo.teacherName}}&nbsp;&nbsp;&nbsp;
               </span>
             </section>
             <section class="c-attr-mt of">
               <span class="ml10 vam">
                 <em class="icon18 scIcon"></em>
                 <a class="c-fff vam"
-                   title="收藏"
-                   href="#">收藏</a>
+                   title="Favorite"
+                   href="#">Favorite</a>
               </span>
             </section>
-            <section class="c-attr-mt">
+            <section v-if="isBuy || Number(courseWebVo.price)===0"
+                     class="c-attr-mt">
               <a href="#"
-                 title="立即观看"
-                 class="comm-btn c-btn-3">立即
-                观看</a>
+                 title="Watching"
+                 class="comm-btn c-btn-3">Watching</a>
+            </section>
+            <section v-else
+                     class="c-attr-mt">
+              <a @click="createOrders()"
+                 href="#"
+                 title="Buy this course"
+                 class="comm-btn c-btn-3">Buy this course</a>
             </section>
           </section>
         </aside>
@@ -59,25 +68,25 @@
             <li>
               <p>&nbsp;</p>
               <aside>
-                <span class="c-fff f-fM">购买数</span>
+                <span class="c-fff f-fM">Sold</span>
                 <br>
-                <h6 class="c-fff f-fM mt10">150</h6>
+                <h6 class="c-fff f-fM mt10">{{courseWebVo.buyCount}}</h6>
               </aside>
             </li>
             <li>
               <p>&nbsp;</p>
               <aside>
-                <span class="c-fff f-fM">课时数</span>
+                <span class="c-fff f-fM">Lessons</span>
                 <br>
-                <h6 class="c-fff f-fM mt10">20</h6>
+                <h6 class="c-fff f-fM mt10">{{courseWebVo.lessonNum}}</h6>
               </aside>
             </li>
             <li>
               <p>&nbsp;</p>
               <aside>
-                <span class="c-fff f-fM">浏览数</span>
+                <span class="c-fff f-fM">View Count</span>
                 <br>
-                <h6 class="c-fff f-fM mt10">501</h6>
+                <h6 class="c-fff f-fM mt10">{{courseWebVo.viewCount}}</h6>
               </aside>
             </li>
           </ol>
@@ -94,8 +103,7 @@
                          class="c-infor-tabTitle ctab-title">
                   <a name="c-i"
                      class="current"
-                     title="课程详情">课程详情
-                  </a>
+                     title="课程详情">课程详情</a>
                 </section>
               </div>
               <article class="ml10 mr10 pt20">
@@ -105,35 +113,14 @@
                   </h6>
                   <div class="course-txt-body-wrap">
                     <section class="course-txt-body">
-                      <p>
-                        Java的发展历史，可追溯到1990年。当时
-                        Sun&nbsp;Microsystem公司为了发展消费性电子产品而进行了一个名为Green的项目计
-                        划。该计划
-                        负责人是James&nbsp;Gosling。起初他以C++来写一种内
-                        嵌式软件，可以放在烤面包机或PAD等小型电子消费设备里，使得机器更聪明，具有人工
-                        智
-                        能。但他发现C++并不适合完成这类任务！因为C++常会有使
-                        系统失效的程序错误，尤其是内存管理，需要程序设计师记录并管理内存资源。这给设计
-                        师们造成
-                        极大的负担，并可能产生许多bugs。&nbsp;
-                        <br>为了解决所遇到的问题，Gosling决定要发展一种新的
-                        语言，来解决C++的潜在性危险问题，这个语言名叫Oak。Oak是一种可移植性语言，也就
-                        是一种平台独立语言，能够在各种芯片上运行。
-                        <br>1994年，Oak技术日趋成熟，这时网络正开始蓬勃发
-                        展。Oak研发小组发现Oak很适合作为一种网络程序语言。因此发展了一个能与Oak配合的
-                        浏
-                        览器--WebRunner，后更名为HotJava，它证明了Oak是一
-                        种能在网络上发展的程序语言。由于Oak商标已被注册，工程师们便想到以自己常
-                        享用的咖啡(Java)来重新命名，并于
-                        Sun&nbsp;World&nbsp;95中被发表出来。
-                      </p>
+                      <p v-html="courseWebVo.description">{{courseWebVo.description}}</p>
                     </section>
                   </div>
                 </div>
                 <!-- /课程介绍 -->
                 <div class="mt50">
                   <h6 class="c-g-content c-infor-title">
-                    <span>课程大纲</span>
+                    <span>Chapters</span>
                   </h6>
                   <section class="mt20">
                     <div class="lh-menu-wrap">
@@ -141,30 +128,25 @@
                             class="lh-menu mt10 mr10">
                         <ul>
                           <!-- 文件目录 -->
-                          <li class="lh-menu-stair">
+                          <li class="lh-menu-stair"
+                              v-for="chapter in chapterVideoList"
+                              :key="chapter.id">
                             <a href="javascript: void(0)"
-                               title="第一章"
+                               :title="chapter.title"
                                class="current-1">
-                              <em class="lh-menu-i-1 icon18 mr10"></em>
-                              第一章
-                            </a>
+                              <em class="lh-menu-i-1 icon18 mr10"></em>{{chapter.title}}</a>
+
                             <ol class="lh-menu-ol"
-                                style="display:
-                                block;">
-                              <li class="lh-menu-second ml30">
-                                <a href="#"
-                                   title>
+                                style="display:block;">
+                              <li class="lh-menu-second ml30"
+                                  v-for="video in chapter.children"
+                                  :key="video.id">
+                                <a :href="'/player/'+video.videoSourceId"
+                                   target="_blank">
                                   <span class="fr">
                                     <i class="free-icon vam mr10">免费试听</i>
                                   </span>
-                                  <em class="lh-menu-i-2 icon16 mr5">&nbsp;</em>第一节
-                                </a>
-                              </li>
-                              <li class="lh-menu-second ml30">
-                                <a href="#"
-                                   title
-                                   class="current-2">
-                                  <em class="lh-menu-i-2 icon16 mr5">&nbsp;</em>第二节
+                                  <em class="lh-menu-i-2 icon16 mr5">&nbsp;</em>{{video.title}}
                                 </a>
                               </li>
                             </ol>
@@ -191,7 +173,7 @@
                   <li>
                     <div class="u-face">
                       <a href="#">
-                        <img src="~/assets/photo/teacher/1442297969808.jpg"
+                        <img :src="courseWebVo.avatar"
                              width="50"
                              height="50"
                              alt>
@@ -199,10 +181,10 @@
                     </div>
                     <section class="hLh30 txtOf">
                       <a class="c-333 fsize16 fl"
-                         href="#">周杰伦</a>
+                         href="#">{{courseWebVo.teacherName}}</a>
                     </section>
                     <section class="hLh20 txtOf">
-                      <span class="c-999">毕业于北京大学数学系</span>
+                      <span class="c-999">{{courseWebVo.intro}}</span>
                     </section>
                   </li>
                 </ul>
@@ -217,5 +199,41 @@
   </div>
 </template>
 <script>
-export default {};
+import courseApi from '@/api/course'
+import ordersApi from '@/api/orders'
+
+export default {
+  data() {
+    return {
+      courseWebVo: {},
+      chapterVideoList: [],
+      isbuy: false,
+      courseId: this.$router.params.id
+    }
+  },
+  created() {
+    this.initCourseInfo()
+  },
+  methods: {
+    // Get course info 
+    initCourseInfo() {
+      courseApi.getCourseInfo(this.courseId)
+        .then(response => {
+          this.courseWebVo = response.data.data.courseWebVo,
+            this.chapterVideoList = response.data.data.chapterVideoList,
+            this.isBuy = response.data.data.isBuy
+        })
+    },
+
+    // Create orders
+    createOrders() {
+      ordersApi.createOrders(this.courseId)
+        .then(response => {
+          // Go to order info 
+          this.$router.push({ path: '/orders/' + response.data.data.orderNo })
+        })
+    }
+  }
+
+};
 </script>

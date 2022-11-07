@@ -113,13 +113,13 @@
                          class="img-responsive"
                          :alt="item.title">
                     <div class="cc-mask">
-                      <a href="/course/1"
+                      <a :href="'/course/'+item.id"
                          title="Start to learn"
                          class="commbtn c-btn-1">Start to learn</a>
                     </div>
                   </section>
                   <h3 class="hLh30 txtOf mt10">
-                    <a href="/course/1"
+                    <a :href="'/course/'+item.id"
                        :title="item.title"
                        class="coursetitle fsize18 c-333">{{item.title}}</a>
                   </h3>

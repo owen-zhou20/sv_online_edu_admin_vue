@@ -132,6 +132,28 @@ export const constantRouterMap = [
   },
 
   {
+    path: '/sta',
+    component: Layout,
+    redirect: '/sta/create',
+    name: 'StatisticsDaily',
+    meta: { title: 'Statistics Daily', icon: 'example' },
+    children: [
+      {
+        path: 'create',
+        name: 'CreateData',
+        component: () => import('@/views/statistics/create'),
+        meta: { title: 'Create Data', icon: 'table' }
+      },
+      {
+        path: 'show',
+        name: 'ShowData',
+        component: () => import('@/views/statistics/show'),
+        meta: { title: 'Show Data', icon: 'tree' }
+      }
+    ]
+  },
+
+  {
     path: '/example',
     component: Layout,
     redirect: '/example/table',
