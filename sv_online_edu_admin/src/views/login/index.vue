@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-      <h3 class="title">SV Online Education Admin System</h3>
+      <h3 class="title">Sv Online Edu Admin System</h3>
       <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
@@ -24,13 +24,13 @@
         </span>
       </el-form-item>
       <el-form-item>
-        <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
-          Sign in
+        <el-button :loading="loading" type="primary" style="width:100%;" @click="handleLogin">
+          Login
         </el-button>
       </el-form-item>
       <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
-        <span> password: admin</span>
+        <span> password: 111111</span>
       </div>
     </el-form>
   </div>
@@ -44,22 +44,22 @@ export default {
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!isvalidUsername(value)) {
-        callback(new Error('请输入正确的用户名'))
+        callback(new Error('Please entry a correct username!'))
       } else {
         callback()
       }
     }
     const validatePass = (rule, value, callback) => {
-      if (value.length < 5) {
-        callback(new Error('密码不能小于5位'))
+      if (value.length < 6) {
+        callback(new Error('Password must more than 6 bits!'))
       } else {
         callback()
       }
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: 'admin'
+        username: '',
+        password: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -67,7 +67,7 @@ export default {
       },
       loading: false,
       pwdType: 'password',
-      redirect: undefined
+      redirect: 'http://localhost:9528/#/dashboard'
     }
   },
   watch: {
@@ -89,6 +89,7 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
+          // debugger
           this.loading = true
           this.$store.dispatch('Login', this.loginForm).then(() => {
             this.loading = false

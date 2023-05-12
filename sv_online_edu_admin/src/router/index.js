@@ -21,22 +21,28 @@ import Layout from '../views/layout/Layout'
     icon: 'svg-name'             the icon show in the sidebar,
   }
 **/
-export const constantRouterMap = [
+export const constantRoutes = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
 
+  // Dashboard
   {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
     name: 'Dashboard',
-    hidden: true,
     children: [{
       path: 'dashboard',
-      component: () => import('@/views/dashboard/index')
+      component: () => import('@/views/dashboard/index'),
+      meta: { title: 'SV Edu Dashboard', icon: 'dashboard' }
     }]
-  },
+  }]
+/**
+ * Routes
+ */
+export const asyncRoutes = [
 
+  // Teacher management
   {
     path: '/teacher',
     component: Layout,
@@ -45,22 +51,22 @@ export const constantRouterMap = [
     meta: { title: 'Teacher Management', icon: 'example' },
     children: [
       {
-        path: 'table',
+        path: 'list',
         name: 'Teacher List',
         component: () => import('@/views/edu/teacher/list'),
         meta: { title: 'Teacher List', icon: 'table' }
       },
       {
         path: 'save',
-        name: 'Add Teacher',
+        name: 'Teacher Add',
         component: () => import('@/views/edu/teacher/save'),
-        meta: { title: 'Add Teacher', icon: 'tree' }
+        meta: { title: 'Teacher Add', icon: 'tree' }
       },
       {
         path: 'edit/:id',
-        name: 'EduTeacherEdit',
+        name: 'Teacher Update',
         component: () => import('@/views/edu/teacher/save'),
-        meta: { title: 'Edit Teacher', noCache: 'true' },
+        meta: { title: 'Teacher Update', noCache: true },
         hidden: true
       }
     ]
@@ -81,9 +87,9 @@ export const constantRouterMap = [
       },
       {
         path: 'save',
-        name: 'Add Subject',
+        name: 'Subject Import',
         component: () => import('@/views/edu/subject/save'),
-        meta: { title: 'Add Subject', icon: 'tree' }
+        meta: { title: 'Subject Import', icon: 'tree' }
       }
     ]
   },
@@ -103,9 +109,9 @@ export const constantRouterMap = [
       },
       {
         path: 'courseinfo',
-        name: 'Add Course',
+        name: 'Course Add',
         component: () => import('@/views/edu/course/courseinfo'),
-        meta: { title: 'Add Course', icon: 'tree' }
+        meta: { title: 'Course Add', icon: 'tree' }
       },
       {
         path: 'courseinfo/:id',
@@ -132,21 +138,21 @@ export const constantRouterMap = [
   },
 
   {
-    path: '/sta',
+    path: '/statistics',
     component: Layout,
-    redirect: '/sta/create',
-    name: 'StatisticsDaily',
+    redirect: '/statistics/create',
+    name: 'Statistics Daily',
     meta: { title: 'Statistics Daily', icon: 'example' },
     children: [
       {
         path: 'create',
-        name: 'CreateData',
+        name: 'Create Data',
         component: () => import('@/views/statistics/create'),
         meta: { title: 'Create Data', icon: 'table' }
       },
       {
         path: 'show',
-        name: 'ShowData',
+        name: 'Show Data',
         component: () => import('@/views/statistics/show'),
         meta: { title: 'Show Data', icon: 'tree' }
       }
@@ -154,114 +160,91 @@ export const constantRouterMap = [
   },
 
   {
-    path: '/example',
+    path: '/acl',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
+    redirect: '/acl/user/list',
+    name: 'Access Control',
+    meta: { title: 'Access Control', icon: 'chart' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        path: 'user/list',
+        name: 'User management',
+        component: () => import('@/views/acl/user/list'),
+        meta: { title: 'User management' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
-
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/nested',
-    component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: 'Nested',
-      icon: 'nested'
-    },
-    children: [
-      {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
+        path: 'role/list',
+        name: 'Role management',
+        component: () => import('@/views/acl/role/list'),
+        meta: { title: 'Role management' }
       },
       {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        meta: { title: 'menu2' }
-      }
-    ]
-  },
-
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
+        path: 'role/form',
+        name: 'Role form',
+        component: () => import('@/views/acl/role/form'),
+        meta: { title: 'Role form' },
+        hidden: true
+      },
       {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
+        path: 'role/update/:id',
+        name: 'Role Update',
+        component: () => import('@/views/acl/role/form'),
+        meta: { title: 'Role Update' },
+        hidden: true
+      },
+      {
+        path: 'role/distribution/:id',
+        name: 'Role Menu Assign',
+        component: () => import('@/views/acl/role/roleForm'),
+        meta: { title: 'Role Menu Assign' },
+        hidden: true
+      },
+      {
+        path: 'menu/list',
+        name: 'Menu management',
+        component: () => import('@/views/acl/menu/list'),
+        meta: { title: 'Menu management' }
+      },
+      {
+        path: 'user/add',
+        name: 'User Add',
+        component: () => import('@/views/acl/user/form'),
+        meta: { title: 'User Add' },
+        hidden: true
+      },
+      {
+        path: 'user/update/:id',
+        name: 'User Modify',
+        component: () => import('@/views/acl/user/form'),
+        meta: { title: 'User Modify' },
+        hidden: true
+      },
+      {
+        path: 'user/role/:id',
+        name: 'User Role Assign',
+        component: () => import('@/views/acl/user/roleForm'),
+        meta: { title: 'User Role Assign' },
+        hidden: true
       }
+
     ]
   },
 
   { path: '*', redirect: '/404', hidden: true }
 ]
 
-export default new Router({
-  // mode: 'history', //后端支持可开
+const createRouter = () => new Router({
+  // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRouterMap
+  routes: constantRoutes
 })
+
+const router = createRouter()
+
+// export default new Router({
+//   // mode: 'history', //后端支持可开
+//   scrollBehavior: () => ({ y: 0 }),
+//   routes: constantRouterMap
+// })
+
+export default router
