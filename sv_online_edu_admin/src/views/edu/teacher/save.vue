@@ -2,59 +2,53 @@
   <div class="app-container">
     <h1 style="text-align: center;">Add teacher</h1>
     <el-form label-width="120px">
-      <el-form-item label="讲师名称">
+      <el-form-item label="Teacher Name">
         <el-input v-model="teacher.name" />
       </el-form-item>
-      <el-form-item label="讲师排序">
+      <el-form-item label="Sort">
         <el-input-number
           v-model="teacher.sort"
           :min="0"
           controls-position="right" />
       </el-form-item>
-      <el-form-item label="讲师头衔">
+      <el-form-item label="Teacher Level">
         <el-select
           v-model="teacher.level"
           clearable
-          placeholder="请选择">
-          <!--
-            数据类型一定要和取出的json中的一致，否则没法回填
-            因此，这里value使用动态绑定的值，保证其数据类型是number
-          -->
+          placeholder="Choose teacher level">
           <el-option
             :value="1"
-            label="高级讲师" />
+            label="Normal Teacher" />
           <el-option
             :value="2"
-            label="首席讲师" />
+            label="Head Teacher" />
         </el-select>
       </el-form-item>
-      <el-form-item label="讲师资历">
+      <el-form-item label="Career">
         <el-input v-model="teacher.career" />
       </el-form-item>
-      <el-form-item label="讲师简介">
+      <el-form-item label="Introduction">
         <el-input
           v-model="teacher.intro"
           :rows="10"
           type="textarea" />
       </el-form-item>
 
-      <!-- 讲师头像：TODO -->
-      <!-- 讲师头像 -->
-      <el-form-item label="讲师头像">
-        <!-- 头衔缩略图 -->
+      <!-- Upload Teacher Avatar -->
+      <el-form-item label="Teacher Avatar">
         <pan-thumb :image="teacher.avatar" />
-        <!-- 文件上传按钮 -->
+        <!-- File upload button -->
         <el-button
           type="primary"
           icon="el-icon-upload"
-          @click="imagecropperShow=true">更换头像
+          @click="imagecropperShow=true">Change avatar
         </el-button>
         <!--
-              v-show：是否显示上传组件
-              :key：类似于id，如果一个页面多个图片上传控件，可以做区分
-              :url：后台上传的url地址
-              @close：关闭上传组件
-              @crop-upload-success：上传成功后的回调 -->
+              v-show：show upload component
+              :key：id
+              :url：url
+              @close：close upload component
+              @crop-upload-success：success callback -->
         <image-cropper
           v-show="imagecropperShow"
           :width="300"
@@ -85,7 +79,7 @@ export default {
   components: { ImageCropper, PanThumb },
   data() {
     return {
-      teacher: {
+      teacher: { // teacher Obj
         name: '',
         sort: 0,
         level: 1,
@@ -93,15 +87,16 @@ export default {
         intro: '',
         avatar: ''
       },
-      imagecropperShow: false,
-      imagecropperKey: 0,
+      imagecropperShow: false, // show upload component
+      imagecropperKey: 0, // avatar key
       BASE_API: process.env.BASE_API, // get base_api from dev.env.js
-      saveBtnDisabled: false
+      saveBtnDisabled: false // save button
     }
   },
+  // watch url change and init page
   watch: {
     $route(to, from) {
-      console.log('watch $route')
+      // console.log('watch $route')
       this.init()
     }
   },
@@ -109,21 +104,26 @@ export default {
     this.init()
   },
   methods: {
+
     close() { // close the message box for upload the avatar
       this.imagecropperShow = false
       // reset upload component
       this.imagecropperKey = this.imagecropperKey + 1
     },
+
     cropSuccess(data) { // after success to upload the avatar
       this.teacher.avatar = data.url
       this.imagecropperShow = false
       // reset upload component
       this.imagecropperKey = this.imagecropperKey + 1
     },
+
+    // init teacher data. get this teacher info if url has a teacher id
     init() {
       if (this.$route.params && this.$route.params.id) {
         const id = this.$route.params.id
         this.getTeacherInfo(id)
+        this.saveBtnDisabled = false
       } else {
         this.teacher = {
           id: '',
@@ -134,16 +134,26 @@ export default {
           intro: '',
           avatar: ''
         }
+        this.saveBtnDisabled = false
       }
     },
+
     // select teacher info by id
     getTeacherInfo(id) {
       teacherApi.getTeacherInfo(id)
         .then(response => {
           this.teacher = response.data.teacher
+        }).catch((response) => {
+          this.$message({
+            type: 'error',
+            message: 'Fail to get teacher!'
+          })
         })
     },
+
+    // save button
     saveOrUpdate() {
+      this.saveBtnDisabled = true
       // edit or add teacher info base id in teacher
       // edit teacher info if teacher id is not null
       if (this.teacher.id) {
@@ -154,6 +164,7 @@ export default {
         this.saveTeacher()
       }
     },
+
     // edit teacher
     updateTeacher() {
       teacherApi.updateTeacherInfo(this.teacher)
@@ -161,23 +172,37 @@ export default {
           // notice message
           this.$message({
             type: 'success',
-            message: 'edit completed'
+            message: 'Edit completed'
           })
           // return teacher list,  router jump
+          this.saveBtnDisabled = false
           this.$router.push({ path: '/teacher/list' })
+        }).catch((response) => {
+          this.$message({
+            type: 'error',
+            message: 'Fail to update!'
+          })
         })
     },
+
     // add teacher
     saveTeacher() {
       teacherApi.addTeacher(this.teacher)
-        .then(Response => { // success add teacher
+        .then(response => { // success add teacher
           // notice message
           this.$message({
             type: 'success',
-            message: 'add completed'
+            message: 'Add completed'
           })
           // return teacher list,  router jump
+          this.saveBtnDisabled = false
           this.$router.push({ path: '/teacher/list' })
+        }).catch((response) => {
+        // console.log(response)
+          this.$message({
+            type: 'error',
+            message: 'Add failed!'
+          })
         })
     }
   }

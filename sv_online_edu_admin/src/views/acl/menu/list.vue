@@ -4,9 +4,9 @@
     <el-header style="text-align: center; font-size: 30px">
       Menu list
     </el-header>
-    <!--Search
+    <!--Search-->
     <el-input v-model="filterText" placeholder="Menu Name" style="margin-bottom:30px;"/>
-    -->
+
     <!-- tree -->
     <el-table
       :data="menuList"
@@ -191,7 +191,7 @@ export default {
     // search from element-ui
     filterNode(value, data) {
       if (!value) return true
-      return data.title.toLowerCase().indexOf(value.toLowerCase()) !== -1
+      return data.name.toLowerCase().indexOf(value.toLowerCase()) !== -1
     },
 
     // Remove a menu by id
