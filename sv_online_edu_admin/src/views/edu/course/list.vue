@@ -23,11 +23,11 @@
             label="Draft(Not published)" />
         </el-select>
       </el-form-item>
-      <el-form-item label="添加时间">
+      <el-form-item label="Create time">
         <el-date-picker
           v-model="courseQuery.gmt_create"
           type="datetime"
-          placeholder="选择开始时间"
+          placeholder="Create time"
           format="dd-MM-yyyy HH:mm:ss"
           value-format="yyyy-MM-dd HH:mm:ss"
           default-time="00:00:00" />
@@ -60,7 +60,7 @@
       </el-table-column>
 
       <!-- <el-table-column type="index"
-                       label="序号2"
+                       label="No. 2"
                        width="50" /> -->
 
       <el-table-column

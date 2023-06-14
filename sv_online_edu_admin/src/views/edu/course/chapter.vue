@@ -1,43 +1,52 @@
 <template>
   <div class="app-container">
     <h2 style="text-align: center;">Release new course</h2>
-    <el-steps :active="2"
-              process-status="wait"
-              align-center
-              style="margin-bottom: 40px;">
+    <el-steps
+      :active="2"
+      process-status="wait"
+      align-center
+      style="margin-bottom: 40px;">
       <el-step title="Fill in this course infomation" />
       <el-step title="Create course outline (chapters and videos)" />
       <el-step title="Release new course" />
     </el-steps>
 
-    <el-button type="text"
-               @click="openChapterDialog()">Add chapter</el-button>
+    <el-button
+      type="text"
+      @click="openChapterDialog()">Add chapter</el-button>
 
     <!-- Chapter -->
     <ul class="chanpterList">
-      <li v-for="chapter in chapterVideoList"
-          :key="chapter.id">
+      <li
+        v-for="chapter in chapterVideoList"
+        :key="chapter.id">
         <p>
           {{ chapter.title }}
           <span class="acts">
-            <el-button type="text"
-                       @click="openVideo(chapter.id)">Add video</el-button>
-            <el-button type="text"
-                       @click="openEditChapter(chapter.id)">Modify</el-button>
-            <el-button type="text"
-                       @click="removeChapter(chapter.id)">Delete</el-button>
+            <el-button
+              type="text"
+              @click="openVideo(chapter.id)">Add video</el-button>
+            <el-button
+              type="text"
+              @click="openEditChapter(chapter.id)">Modify</el-button>
+            <el-button
+              type="text"
+              @click="removeChapter(chapter.id)">Delete</el-button>
           </span>
         </p>
         <!-- Video -->
         <ul class="chanpterList videoList">
-          <li v-for="video in chapter.children"
-              :key="video.id">
+          <li
+            v-for="video in chapter.children"
+            :key="video.id">
             <p>{{ video.title }}
               <span class="acts">
-                <el-button type="text"
-                           @click="openEditVideo(video.id)">Modify</el-button>
-                <el-button type="text"
-                           @click="removeVideo(video.id)">Delete</el-button>
+                <el-button
+                  type="text"
+                  @click="openEditVideo(video.id)">Modify</el-button>
+                <el-button
+                  type="text"
+                  @click="removeVideo(video.id)">Delete</el-button>
               </span>
             </p>
           </li>
@@ -45,88 +54,61 @@
       </li>
     </ul>
     <div>
-      <el-button type="info"
-                 icon="el-icon-d-arrow-left"
-                 @click="previous">Previous</el-button>
-      <el-button type="primary"
-                 @click="next">Save and next <i class="el-icon-d-arrow-right el-icon-right" /></el-button>
+      <el-button
+        type="info"
+        icon="el-icon-d-arrow-left"
+        @click="previous">Previous</el-button>
+      <el-button
+        type="primary"
+        @click="next">Save and next <i class="el-icon-d-arrow-right el-icon-right" /></el-button>
     </div>
 
-    <!-- Chapter
-    <ul class="chanpterList">
-      <li v-for="chapter in chapterVideoList"
-          :key="chapter.id">
-        <p>
-          {{ chapter.title }}
-          <span class="acts">
-            <el-button type="text">添加课时</el-button>
-            <el-button style=""
-                       type="text">编辑</el-button>
-            <el-button type="text">删除</el-button>
-          </span>
-        </p>
-        <!-- 视频
-        <ul class="chanpterList videoList">
-          <li v-for="video in chapter.children"
-              :key="video.id">
-            <p>{{ video.title }}
-              <span class="acts">
-                <el-button type="text">编辑</el-button>
-                <el-button type="text">删除</el-button>
-              </span>
-            </p>
-          </li>
-        </ul>
-      </li>
-    </ul>
-
-    <el-form label-width="120px">
-      <el-form-item>
-        <el-button @click="previous">Previous</el-button>
-        <el-button :disabled="saveBtnDisabled"
-                   type="primary"
-                   @click="next">Save and next</el-button>
-      </el-form-item>
-    </el-form>
-    -->
-
     <!-- Add and modify chapter dialog -->
-    <el-dialog :visible.sync="dialogChapterFormVisible"
-               :before-close="closeChapter"
-               title="Add chapter">
-      <el-form :model="chapter"
-               label-width="120px">
+    <el-dialog
+      :visible.sync="dialogChapterFormVisible"
+      :before-close="closeChapter"
+      title="Add chapter">
+      <el-form
+        :model="chapter"
+        label-width="120px">
         <el-form-item label="Chapter title">
           <el-input v-model="chapter.title" />
         </el-form-item>
         <el-form-item label="Chapter sort">
-          <el-input-number v-model="chapter.sort"
-                           :min="0"
-                           controls-position="right" />
+          <el-input-number
+            v-model="chapter.sort"
+            :min="0"
+            controls-position="right" />
         </el-form-item>
       </el-form>
-      <div slot="footer"
-           class="dialog-footer">
-        <el-button type="info"
-                   @click="cancelChapter">Cancel</el-button>
-        <el-button type="primary"
-                   @click="saveOrUpdate">Save</el-button>
+      <div
+        slot="footer"
+        class="dialog-footer">
+        <el-button
+          type="info"
+          @click="cancelChapter">Cancel</el-button>
+        <el-button
+          type="primary"
+          @click="saveOrUpdate">Save</el-button>
       </div>
     </el-dialog>
 
     <!-- Add and modify video dialog -->
-    <el-dialog :visible.sync="dialogVideoFormVisible"
-               :before-close="closeVideo"
-               title="Add or modify video">
-      <el-form :model="video"
-               label-width="120px">
+    <el-dialog
+      :visible.sync="dialogVideoFormVisible"
+      :before-close="closeVideo"
+      title="Add or modify video">
+      <el-form
+        :model="video"
+        label-width="120px">
         <el-form-item label="Video title">
           <el-input v-model="video.title" />
         </el-form-item>
         <el-form-item label="Video sort">
-          <el-input-number v-model="video.sort"
-                           :min="0"
-                           controls-position="right" />
+          <el-input-number
+            v-model="video.sort"
+            :min="0"
+            controls-position="right" />
         </el-form-item>
         <el-form-item label="It is free?">
           <el-radio-group v-model="video.isFree">
@@ -136,16 +118,18 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="Upload a video">
-          <el-upload :on-success="handleVodUploadSuccess"
-                     :on-remove="handleVodRemove"
-                     :before-remove="beforeVodRemove"
-                     :on-exceed="handleUploadExceed"
-                     :file-list="fileList"
-                     :action="BASE_API+'/eduvod/video/uploadVideoAliVod'"
-                     :limit="1"
-                     class="upload-demo">
-            <el-button size="small"
-                       type="primary">Upload a video</el-button>
+          <el-upload
+            :on-success="handleVodUploadSuccess"
+            :on-remove="handleVodRemove"
+            :before-remove="beforeVodRemove"
+            :on-exceed="handleUploadExceed"
+            :file-list="fileList"
+            :action="BASE_API+'/eduvod/video/uploadVideoAliVod'"
+            :limit="1"
+            class="upload-demo">
+            <el-button
+              size="small"
+              type="primary">Upload a video</el-button>
             <el-tooltip placement="right-end">
               <div slot="content">Max support 1G per/video,<br>
                 allow 3GP、ASF、AVI、DAT、DV、FLV、F4V、<br>
@@ -157,12 +141,15 @@
           </el-upload>
         </el-form-item>
       </el-form>
-      <div slot="footer"
-           class="dialog-footer">
-        <el-button type="info"
-                   @click="cancelVideo">Cancel</el-button>
-        <el-button type="primary"
-                   @click="saveOrUpdateVideo">Save</el-button>
+      <div
+        slot="footer"
+        class="dialog-footer">
+        <el-button
+          type="info"
+          @click="cancelVideo">Cancel</el-button>
+        <el-button
+          type="primary"
+          @click="saveOrUpdateVideo">Save</el-button>
       </div>
     </el-dialog>
 
@@ -206,10 +193,7 @@ export default {
   },
   methods: {
     // =================== Upload video to Ali Vod ===============
-    //
-    // closeVideoAliVod() {
-    //  this.handleVodRemove()
-    // },
+
     // When you delete a video
     handleVodRemove() {
       video.deleteAliVodVideo(this.video.videoSourceId)

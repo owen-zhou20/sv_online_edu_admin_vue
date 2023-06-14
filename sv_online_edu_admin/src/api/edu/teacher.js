@@ -38,5 +38,12 @@ export default {
       method: 'put',
       data: teacher
     })
+  },
+  // 6. Get teacher list
+  getListTeacher() {
+    return request({
+      url: `/eduservice/teacher/findAll`,
+      method: 'get'
+    })
   }
 }
