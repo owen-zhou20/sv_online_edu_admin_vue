@@ -89,7 +89,7 @@
           @click="cancelChapter">Cancel</el-button>
         <el-button
           type="primary"
-          @click="saveOrUpdate">Save</el-button>
+          @click="saveOrUpdateCapter">Save</el-button>
       </div>
     </el-dialog>
 
@@ -164,7 +164,7 @@ export default {
   data() {
     return {
       courseId: '', // course id
-      chapterVideoList: [],
+      chapterVideoList: [], // All course chapters list include nested videos list by course id
       chapter: { // Chapter data
         title: '',
         sort: 0
@@ -251,12 +251,17 @@ export default {
           // console.log('video.chapterId ===>' + this.video.chapterId)
           // console.log('video.courseId ===>' + this.video.courseId)
           // console.log('video.videoSourceId ===>' + this.video.videoSourceId)
+        }).catch((response) => {
+          this.$message({
+            type: 'error',
+            message: response.message
+          })
         })
     },
     // Delete video
     removeVideo(videoId) {
       this.$confirm('This will permanently delete this video record. Continue?', 'Warning', {
-        confirmButtonText: 'OK',
+        confirmButtonText: 'Confirm',
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
@@ -339,11 +344,11 @@ export default {
     // Delete chapter
     removeChapter(chapterId) {
       this.$confirm('This will permanently delete this chapter record. Continue?', 'Warning', {
-        confirmButtonText: 'OK',
+        confirmButtonText: 'Confirm',
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        // call delete chapter method
+        // delete chapter method
         chapter.deleteChapter(chapterId)
           .then(response => { // success to delete chapter by id
             this.$message({
@@ -354,11 +359,18 @@ export default {
             this.getChapterVideo()
           })
         // notice message
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: 'Delete canceled'
-        })
+      }).catch((response) => {
+        if (response === 'cancel') {
+          this.$message({
+            type: 'info',
+            message: 'Delete canceled'
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: response.message
+          })
+        }
       })
     },
     // Modify chapter
@@ -367,6 +379,11 @@ export default {
       chapter.getChapter(chapterId)
         .then(response => {
           this.chapter = response.data.chapter
+        }).catch((response) => {
+          this.$message({
+            type: 'error',
+            message: response.message
+          })
         })
     },
     // Open chapter dialog
@@ -390,6 +407,11 @@ export default {
           })
           // Refresh
           this.getChapterVideo()
+        }).catch((response) => {
+          this.$message({
+            type: 'error',
+            message: response.message
+          })
         })
     },
     // Modify chapter
@@ -406,10 +428,15 @@ export default {
           })
           // Refresh
           this.getChapterVideo()
+        }).catch((response) => {
+          this.$message({
+            type: 'error',
+            message: response.message
+          })
         })
     },
     // Save or update butten for chapter
-    saveOrUpdate() {
+    saveOrUpdateCapter() {
       if (!this.chapter.id) {
         this.addChapter()
       } else {

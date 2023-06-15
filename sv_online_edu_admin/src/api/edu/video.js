@@ -13,7 +13,7 @@ export default {
   updateVideo(video) {
     return request({
       url: `/eduservice/video/updateVideo`,
-      method: 'post',
+      method: 'put',
       data: video
     })
   },

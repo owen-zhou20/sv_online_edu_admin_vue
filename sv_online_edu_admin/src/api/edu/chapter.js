@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 export default {
-  // Get all course chapters list include all videos list by course id
+  // Get all course chapters list include nested videos list by course id
   getAllChapterVideo(courseId) {
     return request({
       url: `/eduservice/chapter/getChapterVideo/` + courseId,
@@ -27,7 +27,7 @@ export default {
   updateChapter(chapter) {
     return request({
       url: `/eduservice/chapter/updateChapter`,
-      method: 'post',
+      method: 'put',
       data: chapter
     })
   },
