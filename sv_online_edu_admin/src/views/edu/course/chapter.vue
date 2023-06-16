@@ -276,11 +276,18 @@ export default {
             this.getChapterVideo()
           })
         // notice message
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: 'Delete canceled'
-        })
+      }).catch((response) => {
+        if (response === 'cancel') {
+          this.$message({
+            type: 'info',
+            message: 'Delete canceled'
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: response.message
+          })
+        }
       })
     },
     // Add video dialog
