@@ -35,14 +35,14 @@ export default {
   publishCourse(id) {
     return request({
       url: `/eduservice/course/publishCourse/` + id,
-      method: 'post'
+      method: 'put'
     })
   },
   // 6. Modify course status as draft
   draftCourse(id) {
     return request({
       url: `/eduservice/course/draftCourse/` + id,
-      method: 'post'
+      method: 'put'
     })
   },
   // 7. Course list

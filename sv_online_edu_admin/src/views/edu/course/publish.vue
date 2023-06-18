@@ -1,10 +1,11 @@
 <template>
   <div class="app-container">
     <h2 style="text-align: center;">Release new course</h2>
-    <el-steps :active="3"
-              process-status="wait"
-              align-center
-              style="margin-bottom: 40px;">
+    <el-steps
+      :active="3"
+      process-status="wait"
+      align-center
+      style="margin-bottom: 40px;">
       <el-step title="Fill in this course infomation" />
       <el-step title="Create course outline" />
       <el-step title="Release new course" />
@@ -24,15 +25,18 @@
       </div>
     </div>
     <div>
-      <el-button type="info"
-                 @click="previous"
-                 icon="el-icon-d-arrow-left">Previous</el-button>
-      <el-button :disabled="saveBtnDisabled"
-                 type="success"
-                 @click="SaveDraft">Save as draft</el-button>
-      <el-button :disabled="saveBtnDisabled"
-                 type="primary"
-                 @click="publish">Publish this course</el-button>
+      <el-button
+        type="info"
+        icon="el-icon-d-arrow-left"
+        @click="previous">Previous</el-button>
+      <el-button
+        :disabled="saveBtnDisabled"
+        type="success"
+        @click="SaveDraft">Save as draft</el-button>
+      <el-button
+        :disabled="saveBtnDisabled"
+        type="primary"
+        @click="publish">Publish this course</el-button>
     </div>
   </div>
 </template>
@@ -43,8 +47,8 @@ export default {
   data() {
     return {
       saveBtnDisabled: false,
-      courseId: '',
-      coursePublish: {}
+      courseId: '', // course id
+      coursePublish: {} // course publish info
     }
   },
   created() {
@@ -54,11 +58,11 @@ export default {
     }
 
     // Call getCoursePublishId() to get publish course info
-    this.getCoursePublishId()
+    this.fetchCoursePublishInfo()
   },
   methods: {
     // Get publish course info by course id
-    getCoursePublishId() {
+    fetchCoursePublishInfo() {
       course.getPublishCourseInfo(this.courseId)
         .then(response => {
           this.coursePublish = response.data.publishCourse
@@ -73,7 +77,7 @@ export default {
       course.publishCourse(this.courseId)
         .then(response => {
           var rs = response.code
-          if (rs == 20000) {
+          if (rs === 20000) {
             this.$message({
               type: 'success',
               message: 'Success to publish this course!'
@@ -92,10 +96,10 @@ export default {
       course.draftCourse(this.courseId)
         .then(response => {
           var rs = response.code
-          if (rs == 20000) {
+          if (rs === 20000) {
             this.$message({
               type: 'success',
-              message: 'Success to modify this course as draft!'
+              message: 'Success to save this draft course!'
             })
             this.$router.push({ path: '/course/list' })
           } else {
