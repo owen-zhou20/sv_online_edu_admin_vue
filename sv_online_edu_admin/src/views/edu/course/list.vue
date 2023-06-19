@@ -5,11 +5,36 @@
     <el-form
       :inline="true"
       class="demo-form-inline">
+
+      <!-- Subject -->
+      <!-- One subject -->
+      <el-form-item label="Course subject">
+        <el-select
+          v-model="searchObj.subjectParentId"
+          placeholder="One subject"
+          @change="subjectLevelOneChanged">
+          <el-option
+            v-for="subject in oneSubjectList"
+            :key="subject.id"
+            :label="subject.title"
+            :value="subject.id"/>
+        </el-select>
+        <!-- Two subject -->
+        <el-select v-model="searchObj.subjectId" placeholder="Two subject">
+          <el-option
+            v-for="subjectTwo in twoSubjectList"
+            :key="subjectTwo.id"
+            :label="subjectTwo.title"
+            :value="subjectTwo.id"/>
+        </el-select>
+      </el-form-item>
+      <!-- Course title -->
       <el-form-item>
         <el-input
           v-model="courseQuery.title"
           placeholder="Course title" />
       </el-form-item>
+      <!-- Course publish status -->
       <el-form-item>
         <el-select
           v-model="courseQuery.status"
@@ -23,6 +48,19 @@
             label="Draft(Not published)" />
         </el-select>
       </el-form-item>
+      <!-- Teacher -->
+      <el-form-item>
+        <el-select
+          v-model="searchObj.teacherId"
+          placeholder="Choose a teacher">
+          <el-option
+            v-for="teacher in teacherList"
+            :key="teacher.id"
+            :label="teacher.name"
+            :value="teacher.id"/>
+        </el-select>
+      </el-form-item>
+      <!-- Create time -->
       <el-form-item label="Create time">
         <el-date-picker
           v-model="courseQuery.gmt_create"
@@ -58,10 +96,6 @@
           {{ (page - 1) * limit + scope.$index + 1 }}
         </template>
       </el-table-column>
-
-      <!-- <el-table-column type="index"
-                       label="No. 2"
-                       width="50" /> -->
 
       <el-table-column
         prop="title"
@@ -117,7 +151,7 @@
               type="danger"
               size="mini"
               icon="el-icon-delete"
-              @click="removeDataById(scope.row.id)">Delete course infomation</el-button>
+              @click="removeDataById(scope.row.id)">Delete course</el-button>
           </div>
         </template>
       </el-table-column>
@@ -139,27 +173,39 @@
 
 <script>
 import course from '@/api/edu/course'
+import teacher from '@/api/edu/teacher'
+import subject from '@/api/edu/subject'
 
 export default {
   data() {
     return {
+      listLoading: true,
       list: null,
       page: 1,
       limit: 3,
       total: 0,
       courseQuery: {
         title: '',
+        teacherId: '',
         status: '',
+        subjectParentId: '',
+        subjectId: '',
         gmt_create: null
-      }
+      },
+      teacherList: [], // Teacher List
+      oneSubjectList: [], // One Subject List
+      twoSubjectList: [] // Two Subject List
     }
   },
   created() {
     this.getList()
+    this.initTeacherList()
+    this.initSubjectList()
   },
   methods: {
     // get course list with pagination
     getList(page = 1) {
+      this.listLoading = true
       this.page = page
       course
         .getCourseListPage(this.page, this.limit, this.courseQuery)
@@ -170,13 +216,38 @@ export default {
           this.total = response.data.total
           // console.log(this.list)
           // console.log(this.total)
+          this.listLoading = false
         })
         .catch((error) => {
           console.log(error)
         })
     },
+    // init teacher list
+    initTeacherList() {
+      teacher.getListTeacher()
+        .then((response) => {
+          this.teacherList = response.data.teacherList
+        })
+    },
+    // init subject list
+    initSubjectList() {
+      subject.getSubjectList()
+        .then((response)={
+          this.oneSubjectList = response.data.list
+        })
+    },
+    // handle one subject change
+    subjectLevelOneChanged(value) {
+      for (let i = 0; i < this.oneSubjectList.length; i++) {
+        if (this.oneSubjectList[i].id === value) {
+          this.twoSubjectList = this.oneSubjectList[i].children
+          this.searchObj.subjectId = ''
+        }
+      }
+    },
     resetData() { // reset all conditions for this table
       this.courseQuery = {}
+      this.twoSubjectList = []
       this.getList()
     },
     // Delete course by course id
@@ -196,11 +267,13 @@ export default {
             this.getList()
           })
         // notice message
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: 'Delete canceled'
-        })
+      }).catch((response) => {
+        if (response === 'cancel') {
+          this.$message({
+            type: 'info',
+            message: 'Delete canceled'
+          })
+        }
       })
     },
     // Change size in pagination
