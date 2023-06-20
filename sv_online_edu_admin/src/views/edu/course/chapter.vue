@@ -132,7 +132,7 @@
               type="primary">Upload a video</el-button>
             <el-tooltip placement="right-end">
               <div slot="content">Max support 1G per/video,<br>
-                allow 3GP、ASF、AVI、DAT、DV、FLV、F4V、<br>
+                support 3GP、ASF、AVI、DAT、DV、FLV、F4V、<br>
                 GIF、M2T、M4V、MJ2、MJPEG、MKV、MOV、MP4、<br>
                 MPE、MPG、MPEG、MTS、OGG、QT、RM、RMVB、<br>
                 SWF、TS、VOB、WMV、WEBM etc... file to upload</div>
@@ -245,6 +245,7 @@ export default {
       video.getVideo(videoId)
         .then(response => {
           this.video = response.data.video
+          this.fileList = [{ 'name': this.video.videoOriginalName }]
           // TODO
           this.dialogVideoFormVisible = true
           // console.log('video.isFree ===>' + this.video.isFree)
