@@ -176,7 +176,7 @@ export default {
           })
           // return teacher list,  router jump
           this.saveBtnDisabled = false
-          this.$router.push({ path: '/teacher/list' })
+          this.$router.push({ path: '/edu/teacher/list' })
         }).catch((response) => {
           this.$message({
             type: 'error',
@@ -196,7 +196,7 @@ export default {
           })
           // return teacher list,  router jump
           this.saveBtnDisabled = false
-          this.$router.push({ path: '/teacher/list' })
+          this.$router.push({ path: '/edu/teacher/list' })
         }).catch((response) => {
         // console.log(response)
           this.$message({

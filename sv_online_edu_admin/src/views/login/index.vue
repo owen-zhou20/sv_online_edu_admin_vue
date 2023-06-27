@@ -67,6 +67,7 @@ export default {
       },
       loading: false,
       pwdType: 'password',
+      // redirect: undefined
       redirect: 'http://localhost:9528/#/dashboard'
     }
   },

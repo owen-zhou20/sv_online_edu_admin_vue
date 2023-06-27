@@ -470,11 +470,11 @@ export default {
     },
     previous() {
       // Go to previous step
-      this.$router.push({ path: '/course/courseinfo/' + this.courseId })
+      this.$router.push({ path: '/edu/course/courseinfo/' + this.courseId })
     },
     next() {
       // Go to next step
-      this.$router.push({ path: '/course/publish/' + this.courseId })
+      this.$router.push({ path: '/edu/course/publish/' + this.courseId })
     }
   }
 }

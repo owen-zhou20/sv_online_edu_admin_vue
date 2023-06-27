@@ -70,7 +70,7 @@ export default {
     },
     previous() {
       // Go to previous step
-      this.$router.push({ path: '/course/chapter/' + this.courseId })
+      this.$router.push({ path: '/edu/course/chapter/' + this.courseId })
     },
     publish() {
       // Publish this new course
@@ -82,7 +82,7 @@ export default {
               type: 'success',
               message: 'Success to publish this course!'
             })
-            this.$router.push({ path: '/course/list' })
+            this.$router.push({ path: '/edu/course/list' })
           } else {
             this.$message({
               type: 'error',
@@ -101,7 +101,7 @@ export default {
               type: 'success',
               message: 'Success to save this draft course!'
             })
-            this.$router.push({ path: '/course/list' })
+            this.$router.push({ path: '/edu/course/list' })
           } else {
             this.$message({
               type: 'error',

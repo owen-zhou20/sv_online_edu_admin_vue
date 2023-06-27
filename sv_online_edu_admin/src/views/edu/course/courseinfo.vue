@@ -189,6 +189,7 @@ export default {
               }
               // Get teacher list when this page is created
               this.getListTeacher()
+              this.courseInfo.s
             }).catch((response) => {
               this.$message({
                 type: 'error',
@@ -252,7 +253,7 @@ export default {
             message: 'Success to add course infomation !'
           })
           // Go to next step
-          this.$router.push({ path: '/course/chapter/' + response.data.courseId })
+          this.$router.push({ path: '/edu/course/chapter/' + response.data.courseId })
         }).catch((response) => {
           this.$message({
             type: 'error',
@@ -270,7 +271,7 @@ export default {
             message: 'Success to modify course infomation !'
           })
           // Go to next step
-          this.$router.push({ path: '/course/chapter/' + this.courseId })
+          this.$router.push({ path: '/edu/course/chapter/' + this.courseId })
         }).catch((response) => {
           this.$message({
             type: 'error',

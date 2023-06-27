@@ -19,7 +19,7 @@
           :on-error="fileUploadError"
           :disabled="importBtnDisabled"
           :limit="1"
-          :action="BASE_API+'/eduservice/edu-subject/addSubject'"
+          :action="BASE_API+'/eduservice/subject/addSubject'"
           name="file"
           accept="application/.xlsx">
           <el-button
@@ -73,7 +73,7 @@ export default {
         })
       }
       // show subject list
-      this.$router.push({ path: '/subject/list' })
+      this.$router.push({ path: '/edu/subject/list' })
     },
     // Upload fail
     fileUploadError() {

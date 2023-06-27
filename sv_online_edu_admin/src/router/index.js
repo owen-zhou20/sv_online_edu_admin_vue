@@ -44,7 +44,7 @@ export const asyncRoutes = [
 
   // Teacher management
   {
-    path: '/teacher',
+    path: '/edu/teacher',
     component: Layout,
     redirect: '/teacher/table',
     name: 'Teacher Management',

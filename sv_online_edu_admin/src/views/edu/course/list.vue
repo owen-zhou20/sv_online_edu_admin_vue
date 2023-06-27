@@ -10,7 +10,7 @@
       <!-- One subject -->
       <el-form-item label="Course subject">
         <el-select
-          v-model="searchObj.subjectParentId"
+          v-model="courseQuery.subjectParentId"
           placeholder="One subject"
           @change="subjectLevelOneChanged">
           <el-option
@@ -20,7 +20,7 @@
             :value="subject.id"/>
         </el-select>
         <!-- Two subject -->
-        <el-select v-model="searchObj.subjectId" placeholder="Two subject">
+        <el-select v-model="courseQuery.subjectId" placeholder="Two subject">
           <el-option
             v-for="subjectTwo in twoSubjectList"
             :key="subjectTwo.id"
@@ -51,7 +51,7 @@
       <!-- Teacher -->
       <el-form-item>
         <el-select
-          v-model="searchObj.teacherId"
+          v-model="courseQuery.teacherId"
           placeholder="Choose a teacher">
           <el-option
             v-for="teacher in teacherList"
@@ -60,6 +60,7 @@
             :value="teacher.id"/>
         </el-select>
       </el-form-item>
+      </br>
       <!-- Create time -->
       <el-form-item label="Create time">
         <el-date-picker
@@ -70,15 +71,35 @@
           value-format="yyyy-MM-dd HH:mm:ss"
           default-time="00:00:00" />
       </el-form-item>
-
-      <el-button
-        type="primary"
-        icon="el-icon-search"
-        @click="getList()">Search</el-button>
-      <el-button
-        type="default"
-        @click="resetData()">Reset</el-button>
+      <!-- end time -->
+      <el-form-item label="End time">
+        <el-date-picker
+          v-model="courseQuery.gmt_end"
+          type="datetime"
+          placeholder="End time"
+          format="dd-MM-yyyy HH:mm:ss"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          default-time="00:00:00" />
+      </el-form-item>
+      <div class="search_btn">
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          @click="getList()">Search</el-button>
+        <el-button
+          type="default"
+          @click="resetData()">Reset</el-button>
+      </div>
     </el-form>
+
+    <!-- Tools button -->
+    <div class="add_btn">
+      <el-button
+        v-if="hasPerm('course.add')"
+        type="danger"
+        size="mini"
+        @click="addCourse()">Add</el-button>
+    </div>
 
     <!-- Table -->
     <el-table
@@ -103,7 +124,7 @@
         width="200" />
       <el-table-column
         label="Course Publish status"
-        width="80">
+        width="200">
         <template slot-scope="scope">
           {{ scope.row.status==="Normal"?"Normal":"Draft" }}
         </template>
@@ -112,7 +133,7 @@
       <el-table-column
         prop="lessonNum"
         label="Total lessons"
-        width="80" />
+        width="120" />
       <el-table-column
         prop="gmtCreate"
         label="Create time"
@@ -131,23 +152,35 @@
         align="center">
         <template slot-scope="scope">
           <div class="bg_btn">
-            <router-link :to="'/course/courseinfo/'+scope.row.id">
+            <router-link :to="'/edu/course/courseinfo/'+scope.row.id">
               <el-button
+                v-if="hasPerm('course.update')"
                 type="text"
                 size="mini"
                 icon="el-icon-edit">Edit course infomation</el-button>
             </router-link>
           </div>
           <div class="bg_btn">
-            <router-link :to="'/course/chapter/'+scope.row.id">
+            <router-link :to="'/edu/course/chapter/'+scope.row.id">
               <el-button
+                v-if="hasPerm('chapter.update')"
                 type="text"
                 size="mini"
                 icon="el-icon-edit">Edit course chapter</el-button>
             </router-link>
           </div>
           <div class="bg_btn">
+            <router-link :to="'/edu/course/publish/'+scope.row.id">
+              <el-button
+                v-if="hasPerm('publish.update')"
+                type="text"
+                size="mini"
+                icon="el-icon-edit">Edit course publish status</el-button>
+            </router-link>
+          </div>
+          <div class="bg_btn">
             <el-button
+              v-if="hasPerm('course.remove')"
               type="danger"
               size="mini"
               icon="el-icon-delete"
@@ -190,7 +223,8 @@ export default {
         status: '',
         subjectParentId: '',
         subjectId: '',
-        gmt_create: null
+        gmt_create: null,
+        gmt_end: null
       },
       teacherList: [], // Teacher List
       oneSubjectList: [], // One Subject List
@@ -232,7 +266,7 @@ export default {
     // init subject list
     initSubjectList() {
       subject.getSubjectList()
-        .then((response)={
+        .then((response) => {
           this.oneSubjectList = response.data.list
         })
     },
@@ -241,12 +275,20 @@ export default {
       for (let i = 0; i < this.oneSubjectList.length; i++) {
         if (this.oneSubjectList[i].id === value) {
           this.twoSubjectList = this.oneSubjectList[i].children
-          this.searchObj.subjectId = ''
+          this.courseQuery.subjectId = ''
         }
       }
     },
     resetData() { // reset all conditions for this table
-      this.courseQuery = {}
+      this.courseQuery = {
+        title: '',
+        teacherId: '',
+        status: '',
+        subjectParentId: '',
+        subjectId: '',
+        gmt_create: null,
+        gmt_end: null
+      }
       this.twoSubjectList = []
       this.getList()
     },
@@ -280,6 +322,10 @@ export default {
     handleSizeChange(limit) {
       this.limit = limit
       this.getList()
+    },
+    // To add course
+    addCourse() {
+      this.$router.push({ path: '/edu/course/courseinfo' })
     }
   }
 }
@@ -288,5 +334,8 @@ export default {
 <style>
 .bg_btn {
   margin: 2px;
+}
+.search_btn{
+  margin: 10px;
 }
 </style>
