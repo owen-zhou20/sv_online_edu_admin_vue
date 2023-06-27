@@ -52,13 +52,12 @@
     </el-form>
 
     <!-- Tools button -->
-    <div>
+    <div class="add_btn">
       <el-button
         v-if="hasPerm('teacher.add')"
         type="danger"
         size="mini"
         @click="addTeacher()">Add</el-button>
-
     </div>
 
     <!-- Table -->
@@ -84,7 +83,7 @@
         width="80" />
       <el-table-column
         label="Teacher Level"
-        width="80">
+        width="160">
         <template slot-scope="scope">
           {{ scope.row.level===1?'Normal Teacher':'Head Teacher' }}
         </template>
@@ -106,7 +105,7 @@
         width="200"
         align="center">
         <template slot-scope="scope">
-          <router-link :to="'/teacher/edit/'+scope.row.id">
+          <router-link :to="'/edu/teacher/edit/'+scope.row.id">
             <el-button
               v-if="hasPerm('teacher.update')"
               type="primary"
@@ -195,7 +194,7 @@ export default {
 
     // add teacher
     addTeacher() {
-      this.$router.push({ path: '/teacher/save' })
+      this.$router.push({ path: '/edu/teacher/save' })
     },
 
     // delete teacher method
@@ -238,3 +237,8 @@ export default {
   }
 }
 </script>
+<style>
+.add_btn {
+  margin: 10px;
+}
+</style>
