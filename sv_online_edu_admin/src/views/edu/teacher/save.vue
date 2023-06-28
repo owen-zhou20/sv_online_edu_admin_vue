@@ -54,7 +54,7 @@
           :width="300"
           :height="300"
           :key="imagecropperKey"
-          :url="BASE_API+'/eduoss/fileoss'"
+          :url="BASE_API+'/eduoss/uploadOssFile'"
           field="file"
           @close="close"
           @crop-upload-success="cropSuccess" />
@@ -132,7 +132,7 @@ export default {
           level: 1,
           career: '',
           intro: '',
-          avatar: ''
+          avatar: 'https://sv-edu-online.oss-ap-southeast-2.aliyuncs.com/02.jpg'
         }
         this.saveBtnDisabled = false
       }
