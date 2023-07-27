@@ -2,8 +2,8 @@
   <div class="Page Confirm">
     <div class="Title">
       <h1 class="fl f18">Confirm order</h1>
-      <img src="~/assets/img/cart_setp2.png"
-           class="fr">
+      <img src="~/assets/img/cart_setp3.jpg"
+           class="fr" style="width: 100px; height: 100px;">
       <div class="clear"></div>
     </div>
     <form name="flowForm"

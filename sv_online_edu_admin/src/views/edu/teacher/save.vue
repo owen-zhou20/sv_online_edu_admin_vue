@@ -132,7 +132,7 @@ export default {
           level: 1,
           career: '',
           intro: '',
-          avatar: 'https://sv-edu-online.oss-ap-southeast-2.aliyuncs.com/TeacherAvatar/211.jpeg'
+          avatar: 'https://sv-edu-online.oss-ap-southeast-2.aliyuncs.com/TeacherAvatar/avatar-boy.gif'
         }
         this.saveBtnDisabled = false
       }

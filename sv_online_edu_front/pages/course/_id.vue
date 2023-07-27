@@ -213,11 +213,98 @@
       </div>
     </section>
     <!-- /Course end -->
+    <!-- Comment start-->
+    <div class="mt50 commentHtml"><div>
+        <h6 class="c-c-content c-infor-title" id="i-art-comment">
+          <span class="commentTitle">Course comment</span>
+        </h6>
+        <section class="lh-bj-list pr mt20 replyhtml">
+          <ul>
+            <li class="unBr">
+              <aside class="noter-pic">
+                <img width="50" height="50" class="picImg" src="~/assets/img/avatar-boy.gif">
+                </aside>
+              <div class="of">
+                <section class="n-reply-wrap">
+                  <fieldset>
+                    <textarea name="commentContent" v-model="comment.content" placeholder="Enter your comment" id="commentContent"></textarea>
+                  </fieldset>
+                  <p class="of mt5 tar pl10 pr10">
+                    <span class="fl "><text class="c-red commentContentmeg" style="display: none;"></text></span>
+                    <input type="button" @click="addComment()" value="Comment" class="btn btn-default btn-lg">
+                  </p>
+                </section>
+              </div>
+            </li>
+          </ul>
+        </section>
+        <section class="">
+            <section class="question-list lh-bj-list pr">
+              <ul class="pr10">
+                <li v-for="(comment,index) in data.items" v-bind:key="index">
+                    <aside class="noter-pic">
+                      <img width="50" height="50" class="picImg" :src="comment.avatar">
+                      </aside>
+                    <div class="of">
+                      <span class="fl"> 
+                      <front class="fsize12 c-blue"> 
+                        {{comment.nickname}}</front>
+                      <front class="fsize12 c-999 ml5">Comment:</front></span>
+                    </div>
+                    <div class="noter-txt mt5">
+                      <p>{{comment.content}}</p>
+                    </div>
+                    <div class="of mt5">
+                      <span class="fr"><front class="fsize12 c-999 ml5">{{comment.gmtCreate}}</front></span>
+                    </div>
+                  </li>
+                
+                </ul>
+            </section>
+          </section>
+          
+          <!-- Comment pagination start -->
+          <div class="paging">
+              <!-- has undisable base on hasPrevious -->
+              <a
+              :class="{undisable: !data.hasPrevious}"
+              href="#"
+              title="FirstPage"
+              @click.prevent="gotoPage(1)">First</a>
+              <a
+              :class="{undisable: !data.hasPrevious}"
+              href="#"
+              title="previous"
+              @click.prevent="gotoPage(data.current-1)">&lt;</a>
+              <a
+              v-for="page in data.pages"
+              :key="page"
+              :class="{current: data.current == page, undisable: data.current == page}"
+              :title="'Go to'+page"
+              href="#"
+              @click.prevent="gotoPage(page)">{{ page }}</a>
+              <a
+              :class="{undisable: !data.hasNext}"
+              href="#"
+              title="next"
+              @click.prevent="gotoPage(data.current+1)">&gt;</a>
+              <a
+              :class="{undisable: !data.hasNext}"
+              href="#"
+              title="LastPage"
+              @click.prevent="gotoPage(data.pages)">Last</a>
+              <div class="clear"/>
+          </div>
+          <!-- Comment pagination end -->
+        </div>
+      </div>
+      <!-- Comment end-->
   </div>
 </template>
 <script>
 import courseApi from '@/api/course'
 import ordersApi from '@/api/orders'
+import commentApi from '@/api/comment'
 import cookie from 'js-cookie'
 
 export default {
@@ -226,6 +313,15 @@ export default {
    },
   data() {
     return {
+      data:{},
+      page:1,
+      limit:4,
+      total:10,
+      courseId:'',
+      comment:{
+        content:'',
+        courseId:''
+      },
       courseWebVo: {},
       chapterVideoList: [],
       isBuy: false
@@ -234,6 +330,7 @@ export default {
   },
   created() {
     this.initCourseInfo()
+    this.initComment()
   },
   methods: {
     // Get course info 
@@ -245,7 +342,34 @@ export default {
           this.isBuy = response.data.data.isBuy
         })
     },
+    // Get comment for this course id
+    initComment(){
+      commentApi.getPageList(this.page,this.limit,this.courseId)
+        .then(response => {
+          this.data = response.data.data
+        })
+    },
+    // Add a comment for this course by member Id
+    addComment(){
+      this.comment.courseId = this.courseId
+      this.comment.teacherId = this.courseWebVo.teacherId
+      commentApi.addComment(this.comment)
+        .then(response =>{
+          if(response.data.success){
+            this.comment.content = ''
+            this.initComment()
+          }
+        })
 
+    },
+    // Go to page for comments
+    gotoPage(page){
+      this.page = page
+      commentApi.getPageList(this.page,this.limit,this.courseId)
+        .then(response =>{
+          this.data = response.data.data
+        })
+    },
     // Create orders
     createOrders() {
       if(!(cookie.get('sv_ucenter'))){

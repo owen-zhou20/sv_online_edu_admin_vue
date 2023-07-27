@@ -158,7 +158,7 @@
             <a v-for="page in data.pages"
                :key="page"
                :class="{current: data.current == page, undisable: data.current == page}"
-               :title="'第'+page+'页'"
+               :title="'Go to'+page"
                href="#"
                @click.prevent="gotoPage(page)">{{ page }}</a>
             <a :class="{undisable: !data.hasNext}"

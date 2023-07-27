@@ -3,7 +3,9 @@
     <!--Checkout-->
     <div class="checkout py-container  pay">
       <div class="checkout-tit">
-        <h4 class="fl tit-txt"><span class="success-icon"></span><span class="success-info">Success to create this order. Please pay it now! Order Number:{{payObj.out_trade_no}}</span>
+        <h4 class="fl tit-txt"><span class="success-icon"></span><span class="success-info">Success to create this order. </span>
+          <span class="success-info">Please pay it now! Order Number: </span>
+          <span class="success-info">{{payObj.out_trade_no}}</span>
         </h4>
         <span class="fr"><em class="sui-lead">Pay:</em><em class="orange money">${{payObj.total_fee}}</em></span>
         <div class="clearfix"></div>
