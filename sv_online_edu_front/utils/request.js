@@ -1,13 +1,13 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import cookie from 'js-cookie'
-// 创建axios实例
+// create axios
 const service = axios.create({
-  baseURL: 'http://localhost:9002', // api的base_url
-  timeout: 20000 // 请求超时时间
+  baseURL: 'http://localhost:8222', // api base_url
+  timeout: 20000 // time out
 })
 
-// create http interceptor
+// create http request interceptor
 service.interceptors.request.use(
   config => {
     //debugger
@@ -21,7 +21,7 @@ service.interceptors.request.use(
   })
 
 //
-// create http interceptor
+// create http response interceptor
 service.interceptors.response.use(
   response => {
     //debugger

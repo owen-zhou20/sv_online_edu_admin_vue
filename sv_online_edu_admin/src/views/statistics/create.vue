@@ -1,17 +1,22 @@
 <template>
   <div class="app-container">
-    <!--表单-->
-    <el-form :inline="true"
-             class="demo-form-inline">
-      <el-form-item label="日期">
-        <el-date-picker v-model="day"
-                        type="date"
-                        placeholder="选择要统计的日期"
-                        value-format="yyyy-MM-dd" />
+    <h1 style="text-align: center;">Create statistics data</h1>
+    <!--Table-->
+    <el-form
+      :inline="true"
+      class="demo-form-inline">
+      <el-form-item label="Day">
+        <el-date-picker
+          v-model="day"
+          type="date"
+          placeholder="Pick a day"
+          value-format="yyyy-MM-dd" />
       </el-form-item>
-      <el-button :disabled="btnDisabled"
-                 type="primary"
-                 @click="create()">生成</el-button>
+      <el-button
+        v-if="hasPerm('daily.add')"
+        :disabled="btnDisabled"
+        type="primary"
+        @click="create()">Create</el-button>
     </el-form>
   </div>
 </template>
@@ -27,15 +32,17 @@ export default {
   },
   methods: {
     create() {
+      this.btnDisabled = true
       sta.createStaData(this.day)
         .then(response => {
+          this.btnDisabled = false
           // notice
           this.$message({
             type: 'success',
             message: 'Success to create data!'
           })
           // go to show.vue
-          this.$router.push({ path: '/sta/show' })
+          this.$router.push({ path: '/statistics/show' })
         })
     }
   }

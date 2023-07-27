@@ -1,7 +1,7 @@
 <template>
   <div id="aCoursesList"
        class="bg-fa of">
-    <!-- /课程列表 开始 -->
+    <!-- Course list start -->
     <section class="container">
       <header class="comm-title">
         <h2 class="fl tac">
@@ -11,8 +11,8 @@
       <section class="c-sort-box">
         <section class="c-s-dl">
           <dl>
-            <dt>
-              <span class="c-999 fsize13">Course type</span>
+            <dt style="width: 100px;">
+              <span class="c-999 fsize13" >Course type</span>
             </dt>
             <dd class="c-s-dl-li">
               <ul class="clearfix">
@@ -94,28 +94,31 @@
           </section>
         </div>
         <div class="mt40">
-          <!-- /无数据提示 开始-->
+          <!-- No data notice start-->
           <section class="no-data-wrap"
                    v-if="data.total==0">
             <em class="icon30 no-data-ico">&nbsp;</em>
             <span class="c-666 fsize14 ml10 vam">No data, still working on it...</span>
           </section>
-          <!-- /无数据提示 结束-->
+          <!-- /No data notice end-->
+          <!-- course list start-->
           <article class="comm-course-list"
                    v-if="data.total>0">
             <ul class="of"
                 id="bna">
               <li v-for="item in data.items"
-                  :key="item.id">
-                <div class="cc-l-wrap">
+                  :key="item.id" 
+                  height="100%" width="100%">
+                <div class="cc-l-wrap" >
                   <section class="course-img">
-                    <img :src="item.cover"
+                    <img height="100%" width="100%" 
+                         :src="item.cover"
                          class="img-responsive"
                          :alt="item.title">
                     <div class="cc-mask">
                       <a :href="'/course/'+item.id"
                          title="Start to learn"
-                         class="commbtn c-btn-1">Start to learn</a>
+                         class="comm-btn c-btn-1">Start to learn</a>
                     </div>
                   </section>
                   <h3 class="hLh30 txtOf mt10">
@@ -124,9 +127,8 @@
                        class="coursetitle fsize18 c-333">{{item.title}}</a>
                   </h3>
                   <section class="mt10 hLh20 of">
-                    <span class="fr jgTag bg-green"
-                          v-if="Number(item.price)===0">
-                      <i class="c-fff fsize12 f-fA">Free</i>
+                    <span class="fr jgTag bg-green">
+                      <i class="c-fff fsize12 f-fA">{{ item.price==0? "Free" : "$"+ item.price}}</i>
                     </span>
                     <span class="fl jgAttr c-ccc f-fA">
                       <i class="c-999 f-fA">{{item.buyCount}} Sold</i>
@@ -140,10 +142,11 @@
             <div class="clear"></div>
           </article>
         </div>
-        <!-- 公共分页 开始 -->
+        <!-- course list end-->
+        <!-- Pagenation start -->
         <div>
           <div class="paging">
-            <!-- undisable这个class是否存在，取决于数据属性hasPrevious -->
+            <!-- undisable base on hasPrevious -->
             <a :class="{undisable: !data.hasPrevious}"
                href="#"
                title="FirstPage"
@@ -169,10 +172,10 @@
             <div class="clear" />
           </div>
         </div>
-        <!-- 公共分页 结束 -->
+        <!-- Pagenation end -->
       </section>
     </section>
-    <!-- /课程列表 结束 -->
+    <!-- /Course list end -->
   </div>
 </template>
 <script>
@@ -196,12 +199,12 @@ export default {
     }
   },
   created() {
-    this.initCourseFirst();
+    this.initCourse();
     this.initSubject()
   },
   methods: {
     // 1. Get first page course data
-    initCourseFirst() {
+    initCourse() {
       courseApi.getCourseList(1, 8, this.searchObj)
         .then(response => {
           this.data = response.data.data
@@ -216,6 +219,7 @@ export default {
     },
     // 3. Change page to pagination select course list
     gotoPage(page) {
+      this.page = page
       courseApi.getCourseList(page, 8, this.searchObj)
         .then(response => {
           this.data = response.data.data

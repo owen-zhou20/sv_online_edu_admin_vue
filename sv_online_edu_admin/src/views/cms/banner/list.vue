@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <h1 style="text-align: center;">Teacher list</h1>
+    <h1 style="text-align: center;">Banner list</h1>
 
     <!--select conditions-->
     <el-form
@@ -8,39 +8,8 @@
       class="demo-form-inline">
       <el-form-item>
         <el-input
-          v-model="teacherQuery.name"
-          placeholder="Teacher Name" />
-      </el-form-item>
-      <el-form-item>
-        <el-select
-          v-model="teacherQuery.level"
-          clearable
-          placeholder="Level">
-          <el-option
-            :value="1"
-            label="Normal Teacher" />
-          <el-option
-            :value="2"
-            label="Head Teacher" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="Create Time">
-        <el-date-picker
-          v-model="teacherQuery.begin"
-          type="datetime"
-          placeholder="Create time"
-          format="dd-MM-yyyy HH:mm:ss"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          default-time="00:00:00" />
-      </el-form-item>
-      <el-form-item>
-        <el-date-picker
-          v-model="teacherQuery.end"
-          type="datetime"
-          placeholder="End time"
-          format="dd-MM-yyyy HH:mm:ss"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          default-time="00:00:00" />
+          v-model="bannerQuery.title"
+          placeholder="banner Title" />
       </el-form-item>
       <el-button
         type="primary"
@@ -54,10 +23,10 @@
     <!-- Tools button -->
     <div class="add_btn">
       <el-button
-        v-if="hasPerm('teacher.add')"
+        v-if="hasPerm('banner.add')"
         type="danger"
         size="medium"
-        @click="addTeacher()">Add</el-button>
+        @click="addBanner()">Add</el-button>
     </div>
 
     <!-- Table -->
@@ -78,42 +47,34 @@
       </el-table-column>
 
       <el-table-column
-        prop="name"
-        label="Teacher Name"
+        prop="title"
+        label="Banner Title"
         width="200" />
-      <el-table-column
-        label="Teacher Level"
-        width="160">
-        <template slot-scope="scope">
-          {{ scope.row.level===1?'Normal Teacher':'Head Teacher' }}
-        </template>
-      </el-table-column>
 
       <el-table-column
-        prop="intro"
-        label="Introduction" />
+        prop="sort"
+        label="Sort"
+        width="100" />
+
       <el-table-column
         prop="gmtCreate"
         label="Create Time"
         width="160" />
-      <el-table-column
-        prop="sort"
-        label="Sort"
-        width="60" />
+
       <el-table-column
         label="Modify"
         width="200"
         align="center">
         <template slot-scope="scope">
-          <router-link :to="'/edu/teacher/edit/'+scope.row.id">
+          <router-link :to="'/cms/banner/save/'+scope.row.id">
             <el-button
-              v-if="hasPerm('teacher.update')"
+              v-if="hasPerm('banner.update')"
               type="primary"
               size="mini"
               icon="el-icon-edit">Edit</el-button>
           </router-link>
           <el-button
-            v-if="hasPerm('teacher.remove')"
+            v-if="hasPerm('banner.remove')"
             type="danger"
             size="mini"
             icon="el-icon-delete"
@@ -137,21 +98,18 @@
 </template>
 
 <script>
-import teacher from '@/api/edu/teacher'
+import banner from '@/api/banner'
 
 export default {
   data() {
     return {
       listLoading: true, // loading
-      list: null, // teacher list
+      list: null, // banner list
       page: 1, // current page in pagination
       limit: 5, // limit page in pagination
       total: 0, // total page in pagination
-      teacherQuery: { // search obj
-        name: '',
-        level: '',
-        begin: null,
-        end: null
+      bannerQuery: { // search obj
+        title: ''
       }
     }
   },
@@ -161,17 +119,17 @@ export default {
   },
 
   methods: {
-    // get teacher list with pagination
+    // get banner list with pagination
     getList(page = 1) {
       this.page = page
       this.listLoading = true
-      teacher
-        .getTeacherListPage(this.page, this.limit, this.teacherQuery)
+      banner
+        .getBannerListPage(this.page, this.limit, this.bannerQuery)
         .then((response) => {
           // response from back-end api
           // console.log(response)
           if (response.success === true) {
-            this.list = response.data.rows
+            this.list = response.data.items
             this.total = response.data.total
           }
           this.listLoading = false
@@ -188,25 +146,25 @@ export default {
 
     // reset
     resetData() { // reset all conditions for this table
-      this.teacherQuery = {}
+      this.bannerQuery = {}
       this.getList()
     },
 
-    // add teacher
-    addTeacher() {
-      this.$router.push({ path: '/edu/teacher/save' })
+    // add banner
+    addBanner() {
+      this.$router.push({ path: '/cms/banner/save' })
     },
 
-    // delete teacher method
+    // delete banner method
     removeDataById(id) {
-      this.$confirm('This will permanently delete this teacher. Continue?', 'Warning', {
+      this.$confirm('This will permanently delete this banner. Continue?', 'Warning', {
         confirmButtonText: 'Confirm',
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        // call delete teacher method
-        teacher.deleteTeacherId(id)
-          .then(response => { // success to delete teacher by id
+        // call delete banner method
+        banner.deleteBannerId(id)
+          .then(response => { // success to delete banner by id
             this.$message({
               type: 'success',
               message: 'Delete completed'

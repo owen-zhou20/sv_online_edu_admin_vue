@@ -1,7 +1,7 @@
 <template>
   <div>
-    <!-- 幻灯片 开始 -->
-    <div v-swiper:mySwiper="swiperOption">
+    <!-- Banner start -->
+    <!--<div v-swiper:mySwiper="swiperOption">
       <div class="swiper-wrapper">
 
         <div v-for="banner in bannerList"
@@ -21,16 +21,23 @@
            slot="button-prev"></div>
       <div class="swiper-button-next swiper-button-white"
            slot="button-next"></div>
+    </div>-->
+    <div class="block">
+      <el-carousel height="650px">
+        <el-carousel-item v-for="banner in bannerList" :key="banner.id">
+          <img :src="banner.imageUrl" style="width: 100%;height: 100%">
+        </el-carousel-item>
+      </el-carousel>
     </div>
-    <!-- 幻灯片 结束 -->
+    <!-- Banner end -->
 
     <div id="aCoursesList">
-      <!-- 网校课程 开始 -->
+      <!-- Hot course start -->
       <div>
         <section class="container">
           <header class="comm-title">
             <h2 class="tac">
-              <span class="c-333">热门课程</span>
+              <span class="c-333">Hot Course</span>
             </h2>
           </header>
           <div>
@@ -45,20 +52,19 @@
                            class="img-responsive"
                            :alt="course.title">
                       <div class="cc-mask">
-                        <a href="#"
+                        <a :href="'/course/'+course.id"
                            title="Start to learn"
-                           class="comm-btn c-btn1">Start to learn</a>
+                           class="comm-btn c-btn-1">Start to learn</a>
                       </div>
                     </section>
                     <h3 class="hLh30 txtOf mt10">
-                      <a href="#"
+                      <a :href="'/course/'+course.id"
                          :title="course.title"
                          class="course-title fsize18 c-333">{{course.title}}</a>
                     </h3>
                     <section class="mt10 hLh20 of">
-                      <span class="fr jgTag bg-green"
-                            v-if="Number(course.price) === 0">
-                        <i class="c-fff fsize12 f-fA">Free</i>
+                      <span class="fr jgTag bg-green">
+                        <i class="c-fff fsize12 f-fA">{{ course.price==0? "Free" : "$"+ course.price}}</i>
                       </span>
                       <span class="fl jgAttr c-ccc f-fA">
                         <i class="c-999 f-fA">{{course.buyCount}} Sold</i>
@@ -72,21 +78,25 @@
               <div class="clear"></div>
             </article>
             <section class="tac pt20">
+              <router-link to="/course"
+                         tag="li"
+                         active-class="current">
               <a href="#"
-                 title="全部课程"
-                 class="comm-btn c-btn-2">全部课程
+                 title="All Courses"
+                 class="comm-btn c-btn-2">All Courses
               </a>
+              </router-link>
             </section>
           </div>
         </section>
       </div>
-      <!-- /网校课程 结束 -->
-      <!-- 网校名师 开始 -->
+      <!-- Hot course end -->
+      <!-- Hot teacher start -->
       <div>
         <section class="container">
           <header class="comm-title">
             <h2 class="tac">
-              <span class="c-333">名师大咖</span>
+              <span class="c-333">Hot Teacher</span>
             </h2>
           </header>
           <div>
@@ -96,14 +106,14 @@
                     :key="teacher.id">
                   <section class="i-teach-wrap">
                     <div class="i-teach-pic">
-                      <a href="/teacher/1"
+                      <a :href="'/teacher/'+teacher.id"
                          :title="teacher.name">
                         <img :alt="teacher.name"
                              :src="teacher.avatar">
                       </a>
                     </div>
                     <div class="mt10 hLh30 txtOf tac">
-                      <a href="/teacher/1"
+                      <a :href="'/teacher/'+teacher.id"
                          :title="teacher.name"
                          class="fsize18 c666">{{teacher.name}}</a>
                     </div>
@@ -119,15 +129,20 @@
               <div class="clear"></div>
             </article>
             <section class="tac pt20">
+              <router-link to="/teacher"
+                         tag="li"
+                         active-class="current">
               <a href="#"
-                 title="全部讲师"
-                 class="comm-btn c-btn-2">全部讲师
+                 title="All Teachers"
+                 class="comm-btn c-btn-2"
+                 >All Teachers
               </a>
+            </router-link>
             </section>
           </div>
         </section>
       </div>
-      <!-- /网校名师 结束 -->
+      <!-- Hot teacher end -->
     </div>
   </div>
 </template>
@@ -139,17 +154,17 @@ import index from '@/api/index'
 export default {
   data() {
     return {
-      swiperOption: {
-        //配置分页
+     /* swiperOption: {
+        //pagination
         pagination: {
-          el: '.swiper-pagination'//分页的dom节点
+          el: '.swiper-pagination'//pagination dom
         },
-        //配置导航
+        //nav
         navigation: {
-          nextEl: '.swiper-button-next',//下一页dom节点
-          prevEl: '.swiper-button-prev'//前一页dom节点
+          nextEl: '.swiper-button-next',//next dom
+          prevEl: '.swiper-button-prev'//prev dom
         }
-      },
+      },*/ 
       bannerList: [], // banner list
       courseList: [],  // course list
       teacherList: []  //teacher list
@@ -181,3 +196,21 @@ export default {
   }
 }
 </script>
+
+<style>
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 150px;
+    margin: 0;
+  }
+
+  .el-carousel__item:nth-child(2n) {
+     background-color: #99a9bf;
+  }
+  
+  .el-carousel__item:nth-child(2n+1) {
+     background-color: #d3dce6;
+  }
+</style>

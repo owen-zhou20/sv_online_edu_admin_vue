@@ -1,11 +1,18 @@
 <template>
   <div class="sign">
-    <!--标题-->
+    <!--logo-->
     <div class="logo">
-      <img src="~/assets/img/logo.png"
-           alt="logo">
+      <router-link to="/"
+                         tag="li"
+                         active-class="current">
+        <a>
+          <img src="~/assets/img/logo.png"
+           alt="logo" 
+           width="50%">
+        </a>
+      </router-link>
     </div>
-    <!--表单-->
+    <!--from-->
     <nuxt />
   </div>
 </template>

@@ -1,47 +1,25 @@
 <template>
   <div class="app-container">
-    <h1 style="text-align: center;">Add teacher</h1>
+    <h1 style="text-align: center;">Add Banner</h1>
     <el-form label-width="120px">
-      <el-form-item label="Teacher Name">
-        <el-input v-model="teacher.name" />
+      <el-form-item label="Banner Title">
+        <el-input v-model="banner.title" />
       </el-form-item>
       <el-form-item label="Sort">
         <el-input-number
-          v-model="teacher.sort"
+          v-model="banner.sort"
           :min="0"
           controls-position="right" />
       </el-form-item>
-      <el-form-item label="Teacher Level">
-        <el-select
-          v-model="teacher.level"
-          clearable
-          placeholder="Choose teacher level">
-          <el-option
-            :value="1"
-            label="Normal Teacher" />
-          <el-option
-            :value="2"
-            label="Head Teacher" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="Career">
-        <el-input v-model="teacher.career" />
-      </el-form-item>
-      <el-form-item label="Introduction">
-        <el-input
-          v-model="teacher.intro"
-          :rows="10"
-          type="textarea" />
-      </el-form-item>
 
-      <!-- Upload Teacher Avatar -->
-      <el-form-item label="Teacher Avatar">
-        <pan-thumb :image="teacher.avatar" />
+      <!-- Upload Banner ImageUrl -->
+      <el-form-item label="Banner Image">
+        <pan-thumb :image="banner.imageUrl" />
         <!-- File upload button -->
         <el-button
           type="primary"
           icon="el-icon-upload"
-          @click="imagecropperShow=true">Change avatar
+          @click="imagecropperShow=true">Change banner image
         </el-button>
         <!--
               v-show：show upload component
@@ -71,7 +49,7 @@
 </template>
 
 <script>
-import teacherApi from '@/api/edu/teacher'
+import bannerApi from '@/api/banner'
 import ImageCropper from '@/components/ImageCropper'
 import PanThumb from '@/components/PanThumb'
 
@@ -79,13 +57,10 @@ export default {
   components: { ImageCropper, PanThumb },
   data() {
     return {
-      teacher: { // teacher Obj
-        name: '',
+      banner: { // banner Obj
+        title: '',
         sort: 0,
-        level: 1,
-        career: '',
-        intro: '',
-        avatar: ''
+        imageUrl: ''
       },
       imagecropperShow: false, // show upload component
       imagecropperKey: 0, // avatar key
@@ -112,41 +87,37 @@ export default {
     },
 
     cropSuccess(data) { // after success to upload the avatar
-      this.teacher.avatar = data.url
+      this.banner.avatar = data.url
       this.imagecropperShow = false
       // reset upload component
       this.imagecropperKey = this.imagecropperKey + 1
     },
 
-    // init teacher data. get this teacher info if url has a teacher id
+    // init banner data. get this banner info if url has a banner id
     init() {
       if (this.$route.params && this.$route.params.id) {
         const id = this.$route.params.id
-        this.getTeacherInfo(id)
+        this.getBannerInfo(id)
         this.saveBtnDisabled = false
       } else {
-        this.teacher = {
-          id: '',
-          name: '',
+        this.banner = { // banner Obj
+          title: '',
           sort: 0,
-          level: 1,
-          career: '',
-          intro: '',
-          avatar: 'https://sv-edu-online.oss-ap-southeast-2.aliyuncs.com/TeacherAvatar/211.jpeg'
+          imageUrl: ''
         }
         this.saveBtnDisabled = false
       }
     },
 
-    // select teacher info by id
-    getTeacherInfo(id) {
-      teacherApi.getTeacherInfo(id)
+    // select banner info by id
+    getBannerInfo(id) {
+      bannerApi.getBannerInfo(id)
         .then(response => {
-          this.teacher = response.data.teacher
+          this.banner = response.data.banner
         }).catch((response) => {
           this.$message({
             type: 'error',
-            message: 'Fail to get teacher!'
+            message: 'Fail to get banner!'
           })
         })
     },
@@ -154,29 +125,29 @@ export default {
     // save button
     saveOrUpdate() {
       this.saveBtnDisabled = true
-      // edit or add teacher info base id in teacher
-      // edit teacher info if teacher id is not null
-      if (this.teacher.id) {
-        // edit teacher info if teacher id is not null
-        this.updateTeacher(this.teacher)
+      // edit or add banner info base id in banner
+      // edit banner info if banner id is not null
+      if (this.banner.id) {
+        // edit banner info if banner id is not null
+        this.updateBanner(this.banner)
       } else {
-        // add teacher if teacher id is null
-        this.saveTeacher()
+        // add banner if banner id is null
+        this.saveBanner()
       }
     },
 
-    // edit teacher
-    updateTeacher() {
-      teacherApi.updateTeacherInfo(this.teacher)
-        .then(response => { // success edit teacher
+    // edit banner
+    updateBanner() {
+      bannerApi.updateBannerInfo(this.banner)
+        .then(response => { // success edit banner
           // notice message
           this.$message({
             type: 'success',
             message: 'Edit completed'
           })
-          // return teacher list,  router jump
+          // return banner list,  router jump
           this.saveBtnDisabled = false
-          this.$router.push({ path: '/edu/teacher/list' })
+          this.$router.push({ path: '/cms/banner/list' })
         }).catch((response) => {
           this.$message({
             type: 'error',
@@ -185,18 +156,18 @@ export default {
         })
     },
 
-    // add teacher
-    saveTeacher() {
-      teacherApi.addTeacher(this.teacher)
-        .then(response => { // success add teacher
+    // add banner
+    saveBanner() {
+      bannerApi.addBanner(this.banner)
+        .then(response => { // success add banner
           // notice message
           this.$message({
             type: 'success',
             message: 'Add completed'
           })
-          // return teacher list,  router jump
+          // return banner list,  router jump
           this.saveBtnDisabled = false
-          this.$router.push({ path: '/edu/teacher/list' })
+          this.$router.push({ path: '/cms/banner/list' })
         }).catch((response) => {
         // console.log(response)
           this.$message({

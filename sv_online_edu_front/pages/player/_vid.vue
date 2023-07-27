@@ -6,12 +6,13 @@
     <!-- Ali player js -->
     <script charset="utf-8"
             type="text/javascript"
-            src="https://g.alicdn.com/de/prismplayer/2.8.1/aliplayer-min.js" />
+            src="https://g.alicdn.com/de/prismplayer/2.8.1/aliplayer-min.js" ></script>
     <!-- player dom -->
     <div id="J_prismPlayer"
          class="prism-player" />
   </div>
 </template>
+
 <script>
 import vod from '@/api/vod'
 
@@ -41,20 +42,20 @@ export default {
     player() {
       new Aliplayer({
         id: 'J_prismPlayer',
-        vid: this.vid, // 视频id
-        playauth: this.playAuth, // 播放凭证
-        encryptType: '1', // 如果播放加密视频，则需设置encryptType=1，非加密视频无需设置此项
+        vid: this.vid, 
+        playauth: this.playAuth, 
+        encryptType: '1', 
         width: '100%',
         height: '500px',
-        cover: 'http://guli.shop/photo/banner/1525939573202.jpg', // 封面
-        qualitySort: 'asc', // 清晰度排序
-        mediaType: 'video', // 返回音频还是视频
-        autoplay: false, // 自动播放
-        isLive: false, // 直播
-        rePlay: false, // 循环播放
+        cover: 'https://sv-edu-online.oss-ap-southeast-2.aliyuncs.com/banner/logo1.png', 
+        qualitySort: 'asc', 
+        mediaType: 'video', 
+        autoplay: false, 
+        isLive: false, 
+        rePlay: false, 
         preload: true,
-        controlBarVisibility: 'hover', // 控制条的显示方式：鼠标悬停
-        useH5Prism: true, // 播放器类型：html5
+        controlBarVisibility: 'hover', 
+        useH5Prism: true, 
       }, function (player) {
         console.log('Success to create player')
       })
@@ -72,10 +73,7 @@ export default {
           playAuth: response.data.data.playAuth,
           vid: params.vid
         }
-        this.player()
-      }
-
-      )
+      })
   },
 
   mounted() {
@@ -85,20 +83,20 @@ export default {
     player() {
       new Aliplayer({
         id: 'J_prismPlayer',
-        vid: this.vid, // 视频id
-        playauth: this.playAuth, // 播放凭证
-        encryptType: '1', // 如果播放加密视频，则需设置encryptType=1，非加密视频无需设置此项
+        vid: this.vid, // video id
+        playauth: this.playAuth, // play auth
+        encryptType: '1', // for encrypt video, encryptType=1
         width: '100%',
-        height: '500px',
-        /*cover: 'http://guli.shop/photo/banner/1525939573202.jpg', // 封面*/
-        qualitySort: 'asc', // 清晰度排序
-        mediaType: 'video', // 返回音频还是视频
-        autoplay: false, // 自动播放
-        isLive: false, // 直播
-        rePlay: false, // 循环播放
+        height: '800px',
+        //cover: 'https://sv-edu-online.oss-ap-southeast-2.aliyuncs.com/banner/logo1.png', // cover
+        qualitySort: 'asc', // quality
+        mediaType: 'video', // mediaType
+        autoplay: false, // autoplay
+        isLive: false, // isLive
+        rePlay: false, // rePlay
         preload: true,
-        controlBarVisibility: 'hover', // 控制条的显示方式：鼠标悬停
-        useH5Prism: true, // 播放器类型：html5
+        controlBarVisibility: 'hover', // controlBar:hover
+        useH5Prism: true, // player：html5
         language: 'en-us',
       }, function (player) {
         console.log('Success to create player')

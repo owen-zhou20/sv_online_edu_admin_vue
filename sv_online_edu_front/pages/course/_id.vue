@@ -1,26 +1,28 @@
 <template>
   <div id="aCoursesList"
        class="bg-fa of">
-    <!-- /课程详情 开始 -->
+    <!-- Course start -->
     <section class="container">
+      <!-- Subject start-->
       <section class="path-wrap txtOf hLh30">
         <a href="#"
            title
            class="c-999 fsize14">Home</a>
         \
-        <a href="#"
-           title
-           class="c-999 fsize14">{{courseWebVo.subjectLevelOne}}</a>
+        <a href="/course" title class="c-999 fsize14">All courses</a>
+        \
+        <span  class="c-333 fsize14">{{courseWebVo.subjectLevelOne}}</span>
         \
         <span class="c-333 fsize14">{{courseWebVo.subjectLevelTwo}}</span>
       </section>
+      <!-- Subject end-->
+      <!-- Course base info start-->
       <div>
         <article class="c-v-pic-wrap"
                  style="height: 357px;">
           <section class="p-h-video-box"
                    id="videoPlay">
             <img height="357px"
-                 width="100%"
                  :src="courseWebVo.cover"
                  alt="courseWebVo.title"
                  class="dis c-v-pic">
@@ -56,7 +58,7 @@
             </section>
             <section v-else
                      class="c-attr-mt">
-              <a @click="createOrders()"
+              <a @click.prevent="createOrders()"
                  href="#"
                  title="Buy this course"
                  class="comm-btn c-btn-3">Buy this course</a>
@@ -64,7 +66,7 @@
           </section>
         </aside>
         <aside class="thr-attr-box">
-          <ol class="thr-attr-ol clearfix">
+          <ol class="thr-attr-ol">
             <li>
               <p>&nbsp;</p>
               <aside>
@@ -93,7 +95,8 @@
         </aside>
         <div class="clear"></div>
       </div>
-      <!-- /课程封面介绍 -->
+      <!-- Course base info end-->
+      <!-- Course description info start -->
       <div class="mt20 c-infor-box">
         <article class="fl col-7">
           <section class="mr30">
@@ -103,13 +106,13 @@
                          class="c-infor-tabTitle ctab-title">
                   <a name="c-i"
                      class="current"
-                     title="课程详情">课程详情</a>
+                     title="Course Info">Course Info</a>
                 </section>
               </div>
               <article class="ml10 mr10 pt20">
                 <div>
                   <h6 class="c-i-content c-infor-title">
-                    <span>课程介绍</span>
+                    <span>Course description</span>
                   </h6>
                   <div class="course-txt-body-wrap">
                     <section class="course-txt-body">
@@ -117,7 +120,8 @@
                     </section>
                   </div>
                 </div>
-                <!-- /课程介绍 -->
+                <!-- /Course description info end -->
+                <!-- Chapter start -->
                 <div class="mt50">
                   <h6 class="c-g-content c-infor-title">
                     <span>Chapters</span>
@@ -127,7 +131,6 @@
                       <menu id="lh-menu"
                             class="lh-menu mt10 mr10">
                         <ul>
-                          <!-- 文件目录 -->
                           <li class="lh-menu-stair"
                               v-for="chapter in chapterVideoList"
                               :key="chapter.id">
@@ -141,10 +144,22 @@
                               <li class="lh-menu-second ml30"
                                   v-for="video in chapter.children"
                                   :key="video.id">
-                                <a :href="'/player/'+video.videoSourceId"
-                                   target="_blank">
+                                <a v-if="isBuy || Number(courseWebVo.price)===0" 
+                                  :href="'/player/'+video.videoSourceId"
+                                  :title="video.title"
+                                  target="_blank">
                                   <span class="fr">
-                                    <i class="free-icon vam mr10">免费试听</i>
+                                    <i class="free-icon vam mr10">Play</i>
+                                  </span>
+                                  <em class="lh-menu-i-2 icon16 mr5">&nbsp;</em>{{video.title}}
+                                </a>
+                                <a v-if="!(isBuy || Number(courseWebVo.price)===0)" 
+                                  @click.prevent="createOrders()" 
+                                  href="#" 
+                                  :title="video.title"
+                                  target="_blank">
+                                  <span class="fr">
+                                    <i class="free-icon vam mr10">Buy this course</i>
                                   </span>
                                   <em class="lh-menu-i-2 icon16 mr5">&nbsp;</em>{{video.title}}
                                 </a>
@@ -156,23 +171,24 @@
                     </div>
                   </section>
                 </div>
-                <!-- /课程大纲 -->
+                <!-- /Chapter end -->
               </article>
             </div>
           </section>
         </article>
         <aside class="fl col-3">
           <div class="i-box">
+            <!-- Course teacher start -->
             <div>
               <section class="c-infor-tabTitle c-tab-title">
                 <a title
-                   href="javascript:void(0)">主讲讲师</a>
+                   href="javascript:void(0)">Teacher for this course</a>
               </section>
               <section class="stud-act-list">
                 <ul style="height: auto;">
                   <li>
                     <div class="u-face">
-                      <a href="#">
+                      <a :href="'/teacher/'+courseWebVo.teacherId">
                         <img :src="courseWebVo.avatar"
                              width="50"
                              height="50"
@@ -181,7 +197,7 @@
                     </div>
                     <section class="hLh30 txtOf">
                       <a class="c-333 fsize16 fl"
-                         href="#">{{courseWebVo.teacherName}}</a>
+                         :href="'/teacher/'+courseWebVo.teacherId">{{courseWebVo.teacherName}}</a>
                     </section>
                     <section class="hLh20 txtOf">
                       <span class="c-999">{{courseWebVo.intro}}</span>
@@ -190,25 +206,30 @@
                 </ul>
               </section>
             </div>
+            <!-- /Course teacher end -->
           </div>
         </aside>
         <div class="clear"></div>
       </div>
     </section>
-    <!-- /课程详情 结束 -->
+    <!-- /Course end -->
   </div>
 </template>
 <script>
 import courseApi from '@/api/course'
 import ordersApi from '@/api/orders'
+import cookie from 'js-cookie'
 
 export default {
+  asyncData({ params, error }) {
+     return {courseId: params.id}
+   },
   data() {
     return {
       courseWebVo: {},
       chapterVideoList: [],
-      isbuy: false,
-      courseId: this.$router.params.id
+      isBuy: false
+      //courseId: this.$router.params.id
     }
   },
   created() {
@@ -220,18 +241,22 @@ export default {
       courseApi.getCourseInfo(this.courseId)
         .then(response => {
           this.courseWebVo = response.data.data.courseWebVo,
-            this.chapterVideoList = response.data.data.chapterVideoList,
-            this.isBuy = response.data.data.isBuy
+          this.chapterVideoList = response.data.data.chapterVideoList,
+          this.isBuy = response.data.data.isBuy
         })
     },
 
     // Create orders
     createOrders() {
-      ordersApi.createOrders(this.courseId)
-        .then(response => {
+      if(!(cookie.get('sv_ucenter'))){
+        this.$router.push({ path: '/login/'})
+      }else{
+        ordersApi.createOrders(this.courseId)
+          .then(response => {
           // Go to order info 
           this.$router.push({ path: '/orders/' + response.data.data.orderNo })
         })
+      }
     }
   }
 

@@ -14,7 +14,7 @@
                       :rules="[{ required: true, message: 'Please type your nickname', trigger: 'blur' }]">
           <div>
             <el-input type="text"
-                      placeholder="your nickname"
+                      placeholder="Nickname"
                       v-model="params.nickname" />
             <i class="iconfont icon-user" />
           </div>
@@ -24,7 +24,7 @@
                       :rules="[{ required: true, message: 'Please type your mobile', trigger: 'blur' },{validator: checkPhone, trigger: 'blur'}]">
           <div>
             <el-input type="text"
-                      placeholder="your mobile number"
+                      placeholder="Phone Number"
                       v-model="params.mobile" />
             <i class="iconfont icon-phone" />
           </div>
@@ -52,7 +52,7 @@
                       :rules="[{ required: true, message: 'Please type your password', trigger: 'blur' },{validator: checkPassword, trigger: 'blur'}]">
           <div>
             <el-input type="password"
-                      placeholder="set password"
+                      placeholder="Password"
                       v-model="params.password" />
             <i class="iconfont icon-password" />
           </div>
@@ -64,18 +64,18 @@
                  @click="submitRegister()">
         </div>
         <p class="sign-up-msg">
-          点击 “注册” 即表示您同意并愿意遵守简书
+          Click "Register" means I agree to SvEdu's Terms of Ser-vice and Privacy Policy.
           <br>
           <a target="_blank"
-             href="http://www.jianshu.com/p/c44d171298ce">用户协议</a>
-          和
+             href="http://www.jianshu.com/p/c44d171298ce">Terms of Service</a>
+          and
           <a target="_blank"
-             href="http://www.jianshu.com/p/2ov8x3">隐私政策</a> 。
+             href="http://www.jianshu.com/p/2ov8x3">Privacy Policy</a> 。
         </p>
       </el-form>
-      <!-- 更多注册方式 -->
+      <!-- More way to register -->
       <div class="more-sign">
-        <h6>社交帐号直接注册</h6>
+        <h6>Other account to register</h6>
         <ul>
           <li><a id="weixin"
                class="weixin"
@@ -107,31 +107,41 @@ export default {
       },
       sending: true,      // The user can send a verification code if it is true.
       second: 60,        // time count down
-      codeTest: 'Verification code'
+      codeTest: 'Verification code'  // text to show in verification code 
     }
   },
   methods: {
+    
     // Register
     submitRegister() {
-      registerApi.registerMember(this.params)
-        .then(response => {
-          // Notice success to register 
-          this.$message({
-            type: 'success',
-            message: "注册成功"
-          })
-          // Go to login
-          this.$router.push({ path: '/login' })
-        })
+      this.$refs['userForm'].validate((valid) => {
+        if (valid) {
+          registerApi.registerMember(this.params)
+            .then(response => {
+              // Notice success to register 
+              this.$message({
+                type: 'success',
+                message: "Success to register your account!"
+              })
+              // Go to login
+              this.$router.push({ path: '/login' })
+            })
+        }
+      })
     },
     // Send verification code to mobile 
     getCodeFun() {
-      registerApi.sendCode(this.params.mobile)
-        .then(response => {
-          this.sending = false
-          // Time count down
-          this.timeDown()
-        })
+      if (!this.sending){return}
+      this.$refs.userForm.validateField('mobile', (errMsg) => {
+        if (errMsg == '') {
+          registerApi.sendCode(this.params.mobile)
+            .then(response => {
+              this.sending = false
+              // Time count down
+              this.timeDown()
+            })
+        }
+      })
     },
     // Time count down
     timeDown() {
@@ -151,7 +161,7 @@ export default {
     checkPhone(rule, value, callback) {
       //debugger
       if (!(/^0\d{9}$/.test(value))) {
-        return callback(new Error('Please type a Australian mobile number start from "0"!'))
+        return callback(new Error('Please type a Australian phone number start with "0"!'))
       }
       return callback()
     },

@@ -1,12 +1,16 @@
 <template>
   <div class="guli-player">
     <div class="head">
-      <a href="#"
-         title="SV EDU">
-        <img class="logo"
-             src="~/assets/img/logo.png"
-             lt="SV EDU">
-      </a>
+      <router-link to="/"
+        tag="li"
+        active-class="current">
+        <a href="#"
+          title="SV EDU">
+          <img class="logo"
+              src="~/assets/img/logo.png"
+              lt="SV EDU">
+        </a>
+    </router-link>
     </div>
     <div class="body">
       <div class="content">

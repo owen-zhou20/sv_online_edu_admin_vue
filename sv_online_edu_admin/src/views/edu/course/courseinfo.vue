@@ -15,7 +15,7 @@
     </el-steps>
 
     <!-- Course title-->
-    <el-form label-width="120px">
+    <el-form label-width="150px">
       <el-form-item label="Course title">
         <el-input
           v-model="courseInfo.title"
@@ -97,7 +97,7 @@
           :min="0"
           v-model="courseInfo.price"
           controls-position="right"
-          placeholder="0 is a free course" /> 元
+          placeholder="0 is a free course" /> Dollar (0 is a free course)
       </el-form-item>
 
       <!-- Button -->
@@ -129,7 +129,7 @@ export default {
         teacherId: '',
         lessonNum: 0,
         description: '',
-        cover: '/static/01.jpg',
+        cover: 'https://sv-edu-online.oss-ap-southeast-2.aliyuncs.com/CourseCover/110.jpg',
         price: 0
       },
       courseId: '',
@@ -159,7 +159,7 @@ export default {
           teacherId: '',
           lessonNum: 0,
           description: '',
-          cover: '/static/01.jpg',
+          cover: 'https://sv-edu-online.oss-ap-southeast-2.aliyuncs.com/CourseCover/110.jpg',
           price: 0
         }
         // Get teacher list when this page is created

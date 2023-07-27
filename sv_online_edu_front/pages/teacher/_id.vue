@@ -1,7 +1,7 @@
 <template>
   <div id="aCoursesList"
        class="bg-fa of">
-    <!-- 讲师介绍 开始 -->
+    <!-- Teacher start -->
     <section class="container">
       <header class="comm-title">
         <h2 class="fl tac">
@@ -13,15 +13,17 @@
         <section class="fl t-infor-box c-desc-content">
           <div class="mt20 ml20">
             <section class="t-infor-pic">
-              <img :src="teacher.avatar">
+              <img :src="teacher.avatar" :alt="teacher.name" height="200px">
             </section>
             <h3 class="hLh30">
-              <span class="fsize24 c-333">{{teacher.name}}&nbsp;
-                {{teacher.level===1?'First level teacher':'Top level teacher'}}</span>
+              <span class="fsize24 c-333"><div class="text-wrapper">{{teacher.name}}
+{{teacher.level===1?'Normal Teacher':'Head Teacher'}}</div></span>
             </h3>
+            &nbsp;&nbsp;
             <section class="mt10">
               <span class="t-tag-bg">{{teacher.intro}}</span>
             </section>
+            &nbsp;&nbsp;
             <section class="t-infor-txt">
               <p class="mt20">{{teacher.career}}</p>
             </section>
@@ -40,13 +42,14 @@
               <a href="javascript: void(0)">&nbsp;</a>
             </section>
           </header>
-          <!-- /无数据提示 开始-->
+          <!-- No data notice start-->
           <section class="no-data-wrap"
                    v-if="courseList.length==0">
             <em class="icon30 no-data-ico">&nbsp;</em>
             <span class="c-666 fsize14 ml10 vam">No data, still working on it...</span>
           </section>
-          <!-- /无数据提示 结束-->
+          <!-- /No data notice end-->
+          <!-- course list start-->
           <article class="comm-course-list">
             <ul class="of">
               <li v-for="course in courseList"
@@ -56,14 +59,14 @@
                     <img :src="course.cover"
                          class="img-responsive">
                     <div class="cc-mask">
-                      <a href="#"
+                      <a :href="'/course/'+course.id"
                          title="Start to learn"
                          target="_blank"
                          class="comm-btn c-btn-1">Start to learn</a>
                     </div>
                   </section>
                   <h3 class="hLh30 txtOf mt10">
-                    <a href="#"
+                    <a :href="'/course/'+course.id"
                        :title="course.title"
                        target="_blank"
                        class="course-title fsize18 c-333">{{course.title}}</a>
@@ -73,10 +76,11 @@
             </ul>
             <div class="clear"></div>
           </article>
+          <!-- course list end-->
         </div>
       </section>
     </section>
-    <!-- /讲师介绍 结束 -->
+    <!-- /Teacher end -->
   </div>
 </template>
 <script>
@@ -97,3 +101,8 @@ export default {
 
 };
 </script>
+<style scope>
+    .text-wrapper {
+        white-space: pre-wrap;
+    }
+</style>

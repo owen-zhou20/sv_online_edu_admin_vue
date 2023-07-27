@@ -1,7 +1,7 @@
 <template>
   <div class="Page Confirm">
     <div class="Title">
-      <h1 class="fl f18">订单确认</h1>
+      <h1 class="fl f18">Confirm order</h1>
       <img src="~/assets/img/cart_setp2.png"
            class="fr">
       <div class="clear"></div>
@@ -13,20 +13,18 @@
       <table class="GoodList">
         <tbody>
           <tr>
-            <th class="name">商品</th>
-            <th class="price">原价</th>
-            <th class="priceNew">价格</th>
+            <th class="name">Item</th>
+            <th class="price">Price</th>
+            <th class="priceNew">Price Now</th>
           </tr>
         </tbody>
         <tbody>
           <!-- <tr>
-19
-          <td colspan="3" class="Title red f18 fb"><p>限时折扣</p></td>
-20
+          <td colspan="3" class="Title red f18 fb"><p>Discount</p></td>
         </tr> -->
           <tr>
             <td colspan="3"
-                class="teacher">讲师：{{order.teacherName}}</td>
+                class="teacher">Teacher:{{order.teacherName}}</td>
           </tr>
           <tr class="good">
             <td class="name First">
@@ -42,16 +40,16 @@
               </div>
             </td>
             <td class="price">
-              <p>￥<strong>{{order.totalFee}}</strong></p>
-              <!-- <span class="discName red">限时8折</span> -->
+              <p>$<strong>{{order.totalFee}}</strong></p>
+              <!-- <span class="discName red">Discount:20%</span> -->
             </td>
-            <td class="red priceNew Last">￥<strong>{{order.totalFee}}</strong></td>
+            <td class="red priceNew Last">$<strong>{{order.totalFee}}</strong></td>
           </tr>
           <tr>
             <td class="Billing tr"
                 colspan="3">
               <div class="tr">
-                <p>共 <strong class="red">1</strong> 件商品，合计<span class="red f20">￥<strong>{{order.totalFee}}</strong></span></p>
+                <p>Subtotal: <strong class="red">1</strong> item, Total<span class="red f20">$<strong>{{order.totalFee}}</strong></span></p>
               </div>
             </td>
           </tr>
@@ -62,17 +60,17 @@
              id="AgreeDiv">
           <label for="Agree">
             <p class="on"><input type="checkbox"
-                     checked="checked">我已阅读并同意<a href="javascript:"
-                 target="_blank">《谷粒学院购买协议》</a></p>
+                     checked="checked">I read and accept Sv_edu policies.<a href="javascript:"
+                 target="_blank">Learn more about Sv_edu policies</a></p>
           </label>
         </div>
         <div class="clear"></div>
         <div class="Main fl">
           <div class="fl">
-            <a :href="'/course/'+order.courseId">返回课程详情页</a>
+            <a :href="'/course/'+order.courseId">Return to course</a>
           </div>
           <div class="fr">
-            <p>共 <strong class="red">1</strong> 件商品，合计<span class="red f20">￥<strong id="AllPrice">{{order.totalFee}}</strong></span></p>
+            <p>Subtotal: <strong class="red">1</strong> item, Total<span class="red f20">$<strong id="AllPrice">{{order.totalFee}}</strong></span></p>
           </div>
         </div>
         <input name="score"
@@ -82,7 +80,7 @@
         <button class="fr redb"
                 type="button"
                 id="submitPay"
-                @click="toPay()">去支付</button>
+                @click="toPay()">Pay</button>
         <div class="clear"></div>
       </div>
     </form>

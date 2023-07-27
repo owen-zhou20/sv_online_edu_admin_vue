@@ -1,15 +1,15 @@
 <template>
   <div class="in-wrap">
 
-    <!-- 公共头引入 -->
+    <!-- Common header -->
     <header id="header">
       <section class="container">
         <h1 id="logo">
           <a href="#"
-             title="谷粒学院">
+             title="SV EDU">
             <img src="~/assets/img/logo.png"
                  width="100%"
-                 alt="谷粒学院">
+                 alt="SV EDU">
           </a>
         </h1>
         <div class="h-r-nsl">
@@ -18,42 +18,42 @@
                          tag="li"
                          active-class="current"
                          exact>
-              <a>首页</a>
+              <a>Homepage</a>
             </router-link>
             <router-link to="/course"
                          tag="li"
                          active-class="current">
-              <a>课程</a>
+              <a>Courses</a>
             </router-link>
             <router-link to="/teacher"
                          tag="li"
                          active-class="current">
-              <a>名师</a>
+              <a>Teachers</a>
             </router-link>
             <router-link to="/article"
                          tag="li"
                          active-class="current">
-              <a>文章</a>
+              <a>Articles</a>
             </router-link>
-            <router-link to="/qa"
+            <router-link to="/support"
                          tag="li"
                          active-class="current">
-              <a>问答</a>
+              <a>Support</a>
             </router-link>
           </ul>
-          <!-- / nav -->
+          <!--  /nav -->
           <ul class="h-r-login">
             <li v-if="!loginInfo.id"
                 id="no-login">
               <a href="/login"
-                 title="登录">
+                 title="Login">
                 <em class="icon18 login-icon">&nbsp;</em>
-                <span class="vam ml5">登录</span>
+                <span class="vam ml5">Login</span>
               </a>
               |
               <a href="/register"
-                 title="注册">
-                <span class="vam ml5">注册</span>
+                 title="Register">
+                <span class="vam ml5">Register</span>
               </a>
             </li>
             <li v-if="loginInfo.id"
@@ -61,7 +61,7 @@
                 class="mr10">
               <a id="headerMsgCountId"
                  href="#"
-                 title="消息">
+                 title="Message">
                 <em class="icon18 news-icon">&nbsp;</em>
               </a>
               <q class="red-point"
@@ -81,18 +81,18 @@
                       class="vam disIb">{{ loginInfo.nickname }}</span>
               </a>
               <a href="javascript:void(0);"
-                 title="退出"
+                 title="Logout"
                  @click="logout()"
-                 class="ml5">退出</a>
+                 class="ml5">Logout</a>
             </li>
-            <!-- /未登录显示第1 li；登录后显示第2，3 li -->
+            <!-- /show first li if not login；show 2，3 li if login -->
           </ul>
           <aside class="h-r-search">
             <form action="#"
                   method="post">
               <label class="h-r-s-box">
                 <input type="text"
-                       placeholder="输入你想学的课程"
+                       placeholder="Search course"
                        name="queryCourse.courseName"
                        value>
                 <button type="submit"
@@ -109,22 +109,22 @@
         <div class="clear"></div>
       </section>
     </header>
-    <!-- /公共头引入 -->
+    <!-- /Common header -->
 
     <nuxt />
 
-    <!-- 公共底引入 -->
+    <!-- Common footer -->
     <footer id="footer">
       <section class="container">
         <div class>
           <h4 class="hLh30">
-            <span class="fsize18 f-fM c-999">友情链接</span>
+            <span class="fsize18 f-fM c-999">Sv Website</span>
           </h4>
           <ul class="of flink-list">
             <li>
-              <a href="http://www.atguigu.com/"
-                 title="尚硅谷"
-                 target="_blank">尚硅谷</a>
+              <a href="http://www.sv.com/"
+                 title="Sv shopping portal"
+                 target="_blank">Sv Shopping Portal</a>
             </li>
           </ul>
           <div class="clear"></div>
@@ -134,22 +134,22 @@
             <section class="mr20">
               <section class="b-f-link">
                 <a href="#"
-                   title="关于我们"
-                   target="_blank">关于我们</a>|
+                   title="About Sv Edu"
+                   target="_blank">About Sv Edu</a>|
                 <a href="#"
-                   title="联系我们"
-                   target="_blank">联系我们</a>|
+                   title="Contact us"
+                   target="_blank">Contact us</a>|
                 <a href="#"
-                   title="帮助中心"
-                   target="_blank">帮助中心</a>|
+                   title="Help and Support"
+                   target="_blank">Help and Support</a>|
                 <a href="#"
-                   title="资源下载"
-                   target="_blank">资源下载</a>|
-                <span>服务热线：010-56253825(北京) 0755-85293825(深圳)</span>
-                <span>Email：info@atguigu.com</span>
+                   title="Privacy policy"
+                   target="_blank">Privacy policy</a>|
+                <span>Careers</span>
+                <span>Email:owen.zhou20@gmail.com</span>
               </section>
               <section class="b-f-link mt10">
-                <span>©2018课程版权均归谷粒学院所有 京ICP备17055252号</span>
+                <span>Copyright © 2004 - 2023 Pluralsight LLC. All rights reserved</span>
               </section>
             </section>
           </section>
@@ -171,7 +171,7 @@
         </div>
       </section>
     </footer>
-    <!-- /公共底引入 -->
+    <!-- /Common footer -->
 
   </div>
 </template>
@@ -218,12 +218,13 @@ export default {
   methods: {
     // Wechat login
     wcLogin() {
+      if (this.token == '') return
       cookie.set('sv_token', this.token, { domain: 'localhost' })
       cookie.set('sv_ucenter', '', { domain: 'localhost' })
       loginApi.getLoginUserInfo()
         .then(response => {
           this.loginInfo = response.data.data.userInfo
-          cookie.set('sv_ucenter', this.loginInfo, { domain: 'localhost' })
+          cookie.set('sv_ucenter', JSON.stringify(this.loginInfo), { domain: 'localhost' })
         })
 
     },

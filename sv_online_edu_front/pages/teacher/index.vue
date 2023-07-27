@@ -1,16 +1,16 @@
 <template>
   <div id="aCoursesList"
        class="bg-fa of">
-    <!-- 讲师列表 开始 -->
+    <!-- Teacher list start -->
     <section class="container">
       <header class="comm-title all-teacher-title">
         <h2 class="fl tac">
-          <span class="c-333">全部讲师</span>
+          <span class="c-333">All teachers</span>
         </h2>
         <section class="c-tab-title">
           <a id="subjectAll"
-             title="全部"
-             href="#">全部</a>
+             title="All"
+             href="#">All</a>
           <!-- <c:forEach var="subject" items="${subjectList }">
             <a id="${subject.subjectId}"
               title="${subject.subjectName }" href="javascript:void(0)"
@@ -20,24 +20,25 @@
       </header>
       <section class="c-sort-box unBr">
         <div>
-          <!-- /无数据提示 开始-->
+          <!-- /No data notice start-->
           <section class="no-data-wrap"
                    v-if="data.total==0">
             <em class="icon30 no-data-ico">&nbsp;</em>
             <span class="c-666 fsize14 ml10 vam">No data, still working on it...</span>
           </section>
-          <!-- /无数据提示 结束-->
+          <!-- /No data notice end-->
           <article class="i-teacher-list"
                    v-if="data.total>0">
             <ul class="of">
               <li v-for="teacher in data.items"
-                  :key="teacher.id">
+                  :key="teacher.id" height="300px" >
                 <section class="i-teach-wrap">
                   <div class="i-teach-pic">
                     <a :href="'/teacher/'+teacher.id"
                        :title="teacher.name"
                        target="_blank">
-                      <img :src="teacher.avatar"
+                      <img height="200px"
+                           :src="teacher.avatar"
                            :alt="teacher.name">
                     </a>
                   </div>
@@ -59,10 +60,10 @@
             <div class="clear"></div>
           </article>
         </div>
-        <!-- 公共分页 开始 -->
+        <!-- Pagetion start -->
         <div>
           <div class="paging">
-            <!-- undisable这个class是否存在，取决于数据属性hasPrevious -->
+            <!-- undisable base on hasPrevious -->
             <a :class="{undisable: !data.hasPrevious}"
                href="#"
                title="FirstPage"
@@ -74,7 +75,7 @@
             <a v-for="page in data.pages"
                :key="page"
                :class="{current: data.current == page, undisable: data.current == page}"
-               :title="'第'+page+'页'"
+               :title="'Go to'+page"
                href="#"
                @click.prevent="gotoPage(page)">{{ page }}</a>
             <a :class="{undisable: !data.hasNext}"
@@ -88,10 +89,10 @@
             <div class="clear" />
           </div>
         </div>
-        <!-- 公共分页 结束 -->
+        <!-- Pagetion end -->
       </section>
     </section>
-    <!-- /讲师列表 结束 -->
+    <!-- /Teacher list end -->
   </div>
 </template>
 <script>

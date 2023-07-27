@@ -2,29 +2,29 @@
   <div class="main">
     <div class="title">
       <a class="active"
-         href="/login">登录</a>
+         href="/login">Login</a>
       <span>·</span>
-      <a href="/register">注册</a>
+      <a href="/register">Register Now</a>
     </div>
     <div class="sign-up-container">
       <el-form ref="userForm"
                :model="user">
         <el-form-item class="input-prepend restyle"
                       prop="mobile"
-                      :rules="[{ required: true, message: '请输入手机号码', trigger: 'blur' },{validator: checkPhone, trigger: 'blur'}]">
+                      :rules="[{ required: true, message: 'Please enter your phone number!', trigger: 'blur' },{validator: checkPhone, trigger: 'blur'}]">
           <div>
             <el-input type="text"
-                      placeholder="手机号"
+                      placeholder="Phone Number"
                       v-model="user.mobile" />
             <i class="iconfont icon-phone" />
           </div>
         </el-form-item>
         <el-form-item class="input-prepend"
                       prop="password"
-                      :rules="[{ required: true, message: '请输入密码', trigger: 'blur' }]">
+                      :rules="[{ required: true, message: 'Please enter your password!', trigger: 'blur' }]">
           <div>
             <el-input type="password"
-                      placeholder="密码"
+                      placeholder="Password"
                       v-model="user.password" />
             <i class="iconfont icon-password" />
           </div>
@@ -32,13 +32,13 @@
         <div class="btn">
           <input type="button"
                  class="sign-in-button"
-                 value="登录"
+                 value="Login"
                  @click="submitLogin()">
         </div>
       </el-form>
-      <!-- 更多登录方式 -->
+      <!-- other way to login -->
       <div class="more-sign">
-        <h6>社交帐号登录</h6>
+        <h6>Other account to login</h6>
         <ul>
           <li>
             <a id="weixin"
@@ -89,7 +89,10 @@ export default {
             .then(response => {
               // Get user info and put into cookie
               this.loginInfo = response.data.data.userInfo
+              //console.log('this.loginInfo ==='+this.loginInfo)
+              //console.log('JSON.stringify(this.loginInfo) ==='+JSON.stringify(this.loginInfo))
               cookie.set('sv_ucenter', JSON.stringify(this.loginInfo), { domain: 'localhost' })
+              //cookie.set('sv_ucenter', this.loginInfo, { domain: 'localhost' })
               // go to home page
               window.location.href = "/";
             })
@@ -98,8 +101,8 @@ export default {
     },
     checkPhone(rule, value, callback) {
       //debugger
-      if (!(/^1[34578]\d{9}$/.test(value))) {
-        return callback(new Error('手机号码格式不正确'))
+      if (!(/^0\d{9}$/.test(value))) {
+        return callback(new Error('Please type a Australian phone number start with "0"!'))
       }
       return callback()
     }

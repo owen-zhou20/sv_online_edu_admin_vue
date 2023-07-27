@@ -142,7 +142,7 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/statistics/create',
     name: 'Statistics Daily',
-    meta: { title: 'Statistics Daily', icon: 'example' },
+    meta: { title: 'Statistics Daily', icon: 'chart' },
     children: [
       {
         path: 'create',
@@ -154,7 +154,28 @@ export const asyncRoutes = [
         path: 'show',
         name: 'Show Data',
         component: () => import('@/views/statistics/show'),
-        meta: { title: 'Show Data', icon: 'tree' }
+        meta: { title: 'Show Data', icon: 'chart' }
+      }
+    ]
+  },
+  {
+    path: '/cms',
+    component: Layout,
+    redirect: '/cms/banner/list',
+    name: 'CMS Management',
+    meta: { title: 'CMS Management', icon: 'example' },
+    children: [
+      {
+        path: 'list',
+        name: 'Banner List',
+        component: () => import('@/views/cms/banner/list'),
+        meta: { title: 'Banner List', icon: 'table' }
+      },
+      {
+        path: 'save',
+        name: 'Banner Add',
+        component: () => import('@/views/cms/banner/save'),
+        meta: { title: 'Banner Add', icon: 'tree' }
       }
     ]
   },

@@ -97,7 +97,7 @@
       <el-button
         v-if="hasPerm('course.add')"
         type="danger"
-        size="mini"
+        size="medium"
         @click="addCourse()">Add</el-button>
     </div>
 
@@ -215,7 +215,7 @@ export default {
       listLoading: true,
       list: null,
       page: 1,
-      limit: 3,
+      limit: 5,
       total: 0,
       courseQuery: {
         title: '',
@@ -336,6 +336,9 @@ export default {
   margin: 2px;
 }
 .search_btn{
+  margin: 10px;
+}
+.add_btn{
   margin: 10px;
 }
 </style>
