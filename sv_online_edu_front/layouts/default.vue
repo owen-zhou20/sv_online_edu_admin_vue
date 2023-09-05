@@ -30,7 +30,7 @@
                          active-class="current">
               <a>Teachers</a>
             </router-link>
-            <router-link to="/article"
+            <router-link to="/articles"
                          tag="li"
                          active-class="current">
               <a>Articles</a>

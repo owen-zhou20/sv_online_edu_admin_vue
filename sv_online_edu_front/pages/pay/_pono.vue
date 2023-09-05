@@ -54,8 +54,8 @@ export default {
   },
   // call interv every 3 seconds
   mounted() { // after
-    setInterval(() => {
-      this.timer1 = this.queryOrderStatus(this.payObj.out_trade_no)  // out_trade_no is orderNo
+    this.timer1 = setInterval(() => {
+      this.queryOrderStatus(this.payObj.out_trade_no)  // out_trade_no is orderNo
     }, 3000)
 
   },
@@ -72,14 +72,13 @@ export default {
               type: 'seuucess',
               message: 'Success to pay for this course!'
             })
+            console.log('timer1===>'+this.timer1)
             // go to course info page
-            this.$router.puysh({ path: '/course/' + this.payObj.course_id })
+            this.$router.push({ path: '/course/' + this.payObj.course_id })
           }
         })
     }
   }
-
-
 
 }
 </script>

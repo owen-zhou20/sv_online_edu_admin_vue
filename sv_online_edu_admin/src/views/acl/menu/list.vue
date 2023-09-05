@@ -4,9 +4,9 @@
     <el-header style="text-align: center; font-size: 30px">
       Menu list
     </el-header>
-    <!--Search-->
+    <!--Search
     <el-input v-model="filterText" placeholder="Menu Name" style="margin-bottom:30px;"/>
-
+    -->
     <!-- tree -->
     <el-table
       :data="menuList"
